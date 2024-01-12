@@ -66,6 +66,66 @@ async function run() {
 
     })
 
+    
+
+      // Admin Update User Role Admin __________________________
+      app.patch("/AdminUpdateRoleAdmin/:id",async(req,res)=>{
+        let upId=req.params.id
+        let filter={_id : new ObjectId(upId)}
+        let updateAdmin={
+          $set:{
+            role:"admin"
+          }
+        }
+        let result = await userCollection.updateOne(filter,updateAdmin)
+        res.send(result)
+      })
+      // Admin Update User Role User __________________________
+      app.patch("/AdminUpdateRoleUser/:id",async(req,res)=>{
+        let upId=req.params.id
+        let filter={_id : new ObjectId(upId)}
+        let updateAdmin={
+          $set:{
+            role:"user"
+          }
+        }
+        let result = await userCollection.updateOne(filter,updateAdmin)
+        res.send(result)
+      })
+      // Admin Update User Role Rider __________________________
+      app.patch("/AdminUpdateRoleRider/:id",async(req,res)=>{
+        let upId=req.params.id
+        let filter={_id : new ObjectId(upId)}
+        let updateAdmin={
+          $set:{
+            role:"rider"
+          }
+        }
+        let result = await userCollection.updateOne(filter,updateAdmin)
+        res.send(result)
+      })
+      // Admin Update User Role Sub Admin __________________________
+      app.patch("/AdminUpdateRoleSubAdmin/:id",async(req,res)=>{
+        let upId=req.params.id
+        let filter={_id : new ObjectId(upId)}
+        let updateAdmin={
+          $set:{
+            role:"subAdmin"
+          }
+        }
+        let result = await userCollection.updateOne(filter,updateAdmin)
+        res.send(result)
+      })
+
+      // Admin Update User Role Sub Admin __________________________
+      app.delete("/AdminDeleteUsers/:id",async(req,res)=>{
+        let upId=req.params.id
+        let query={_id : new ObjectId(upId)}
+        let result = await userCollection.deleteOne(query)
+        res.send(result)
+      })
+
+
 
     // SingUp and github or google new login user data saved Database __________________________
 
