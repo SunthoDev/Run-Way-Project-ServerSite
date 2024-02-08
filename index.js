@@ -538,27 +538,27 @@ async function run() {
 
     app.post("/AdminTrackingSendMessage", async (req, res) => {
       let trackingMeId = req.body
-      let { mes1, mes2, mes3, mes4, mes5, mes6, mes7, mes8, mes9,mes10,mes11,mes12,mes13,mes14,mes15,mes16,mes17,mes18,TrackingMessage,TrackingDate} = trackingMeId
+      let { mes1, mes2, mes3, mes4, mes5, mes6, mes7, mes8, mes9, mes10, mes11, mes12, mes13, mes14, mes15, mes16, mes17, mes18, TrackingMessage, TrackingDate } = trackingMeId
       // console.log(mes1,mes2,TrackingMessage)
       let TrackingManyData = [
-        { userOrderIdTracking: mes1, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes2, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes3, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes4, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes5, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes6, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes7, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes8, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes9, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes10, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes11, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes12, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes13, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes14, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes15, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes16, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes17, TrackingMessage,TrackingDate },
-        { userOrderIdTracking: mes18, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes1, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes2, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes3, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes4, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes5, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes6, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes7, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes8, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes9, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes10, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes11, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes12, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes13, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes14, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes15, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes16, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes17, TrackingMessage, TrackingDate },
+        { userOrderIdTracking: mes18, TrackingMessage, TrackingDate },
       ]
       let insertTrackingData = []
 
@@ -572,6 +572,40 @@ async function run() {
       // console.log(result)
       res.send(result)
     })
+
+    // =============================================================
+
+
+
+    // Admin is get tracking message all   
+    // =============================================================
+    app.get("/AllTrackingData", async (req, res) => {
+      let result = await UserTrackingMessageCollection.find().toArray()
+      res.send(result)
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     //================================================================================TODO
