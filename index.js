@@ -41,6 +41,7 @@ async function run() {
     const CoverageAllPoliceStation = client.db("ShipProjects").collection("CoverageAllPoliceStation")
     const UserPaymentRequestCollection = client.db("ShipProjects").collection("UserPaymentRequest")
     const UserPickupRequestCollection = client.db("ShipProjects").collection("UserPickupRequest")
+    const UserTrackingMessageCollection = client.db("ShipProjects").collection("UserTrackingMessage")
 
 
     // get all user Admin Dashboarde __________________________
@@ -66,64 +67,64 @@ async function run() {
 
     })
 
-    
 
-      // Admin Update User Role Admin __________________________
-      app.patch("/AdminUpdateRoleAdmin/:id",async(req,res)=>{
-        let upId=req.params.id
-        let filter={_id : new ObjectId(upId)}
-        let updateAdmin={
-          $set:{
-            role:"admin"
-          }
-        }
-        let result = await userCollection.updateOne(filter,updateAdmin)
-        res.send(result)
-      })
-      // Admin Update User Role User __________________________
-      app.patch("/AdminUpdateRoleUser/:id",async(req,res)=>{
-        let upId=req.params.id
-        let filter={_id : new ObjectId(upId)}
-        let updateAdmin={
-          $set:{
-            role:"user"
-          }
-        }
-        let result = await userCollection.updateOne(filter,updateAdmin)
-        res.send(result)
-      })
-      // Admin Update User Role Rider __________________________
-      app.patch("/AdminUpdateRoleRider/:id",async(req,res)=>{
-        let upId=req.params.id
-        let filter={_id : new ObjectId(upId)}
-        let updateAdmin={
-          $set:{
-            role:"rider"
-          }
-        }
-        let result = await userCollection.updateOne(filter,updateAdmin)
-        res.send(result)
-      })
-      // Admin Update User Role Sub Admin __________________________
-      app.patch("/AdminUpdateRoleSubAdmin/:id",async(req,res)=>{
-        let upId=req.params.id
-        let filter={_id : new ObjectId(upId)}
-        let updateAdmin={
-          $set:{
-            role:"subAdmin"
-          }
-        }
-        let result = await userCollection.updateOne(filter,updateAdmin)
-        res.send(result)
-      })
 
-      // Admin Update User Role Sub Admin __________________________
-      app.delete("/AdminDeleteUsers/:id",async(req,res)=>{
-        let upId=req.params.id
-        let query={_id : new ObjectId(upId)}
-        let result = await userCollection.deleteOne(query)
-        res.send(result)
-      })
+    // Admin Update User Role Admin __________________________
+    app.patch("/AdminUpdateRoleAdmin/:id", async (req, res) => {
+      let upId = req.params.id
+      let filter = { _id: new ObjectId(upId) }
+      let updateAdmin = {
+        $set: {
+          role: "admin"
+        }
+      }
+      let result = await userCollection.updateOne(filter, updateAdmin)
+      res.send(result)
+    })
+    // Admin Update User Role User __________________________
+    app.patch("/AdminUpdateRoleUser/:id", async (req, res) => {
+      let upId = req.params.id
+      let filter = { _id: new ObjectId(upId) }
+      let updateAdmin = {
+        $set: {
+          role: "user"
+        }
+      }
+      let result = await userCollection.updateOne(filter, updateAdmin)
+      res.send(result)
+    })
+    // Admin Update User Role Rider __________________________
+    app.patch("/AdminUpdateRoleRider/:id", async (req, res) => {
+      let upId = req.params.id
+      let filter = { _id: new ObjectId(upId) }
+      let updateAdmin = {
+        $set: {
+          role: "rider"
+        }
+      }
+      let result = await userCollection.updateOne(filter, updateAdmin)
+      res.send(result)
+    })
+    // Admin Update User Role Sub Admin __________________________
+    app.patch("/AdminUpdateRoleSubAdmin/:id", async (req, res) => {
+      let upId = req.params.id
+      let filter = { _id: new ObjectId(upId) }
+      let updateAdmin = {
+        $set: {
+          role: "subAdmin"
+        }
+      }
+      let result = await userCollection.updateOne(filter, updateAdmin)
+      res.send(result)
+    })
+
+    // Admin Update User Role Sub Admin __________________________
+    app.delete("/AdminDeleteUsers/:id", async (req, res) => {
+      let upId = req.params.id
+      let query = { _id: new ObjectId(upId) }
+      let result = await userCollection.deleteOne(query)
+      res.send(result)
+    })
 
 
 
@@ -147,8 +148,10 @@ async function run() {
 
     app.get("/userRoleCheck/:email", async (req, res) => {
       let email = req.params.email
+      // console.log(email)
       let query = { email: email }
       let result = await userCollection.findOne(query)
+      // console.log(result)
       res.send(result)
     })
 
@@ -321,6 +324,7 @@ async function run() {
 
     })
 
+    // =============================================================
     // User Payment Request Send. Post Payment Request Data
     // ===================================================================
     app.post("/UserPaymentRequest", async (req, res) => {
@@ -529,7 +533,45 @@ async function run() {
 
 
 
+    // Admin was send tracking message many id   
+    // =============================================================
 
+    app.post("/AdminTrackingSendMessage", async (req, res) => {
+      let trackingMeId = req.body
+      let { mes1, mes2, mes3, mes4, mes5, mes6, mes7, mes8, mes9,mes10,mes11,mes12,mes13,mes14,mes15,mes16,mes17,mes18,TrackingMessage,TrackingDate} = trackingMeId
+      // console.log(mes1,mes2,TrackingMessage)
+      let TrackingManyData = [
+        { userOrderIdTracking: mes1, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes2, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes3, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes4, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes5, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes6, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes7, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes8, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes9, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes10, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes11, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes12, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes13, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes14, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes15, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes16, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes17, TrackingMessage,TrackingDate },
+        { userOrderIdTracking: mes18, TrackingMessage,TrackingDate },
+      ]
+      let insertTrackingData = []
+
+      for (var item of TrackingManyData) {
+        if (item.userOrderIdTracking !== "") {
+          insertTrackingData.push(item)
+        }
+      }
+      // console.log(insertTrackingData)
+      let result = await UserTrackingMessageCollection.insertMany(insertTrackingData)
+      // console.log(result)
+      res.send(result)
+    })
 
 
     //================================================================================TODO
@@ -590,7 +632,7 @@ async function run() {
           status: "Pending",
           ApprovedOffice: upData.ApprovedOffice,
           ApprovedName: upData.ApprovedName,
-          ApprovedDate: upData.ApprovedDate
+          ApprovedDate: upData.PendingDate
 
         },
       };
@@ -1034,7 +1076,7 @@ async function run() {
 
 
 
-    
+
 
 
     // Send a ping to confirm a successful connection
