@@ -442,15 +442,16 @@ async function run() {
     })
 
 
+   //  User Payment Request Data find
+    // _______________________________________________________________________________
 
-
-
-
-
-
-
-
-
+    app.get("/UserPaymentDetailUnikDataFind/:id", async (req, res) => {
+      let id = req.params.id
+      console.log(id)
+      let query = { _id: new ObjectId(id) }
+      let result = await UserPaymentRequestCollection.findOne(query)
+      res.send(result)
+    })
 
 
 
@@ -574,8 +575,6 @@ async function run() {
     })
 
     // =============================================================
-
-
 
     // Admin is get tracking message all   
     // =============================================================
