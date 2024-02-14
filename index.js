@@ -324,6 +324,7 @@ async function run() {
 
     })
 
+
     // =============================================================
     // User Payment Request Send. Post Payment Request Data
     // ===================================================================
@@ -442,12 +443,12 @@ async function run() {
     })
 
 
-   //  User Payment Request Data find
+    //  User Payment Request Data find
     // _______________________________________________________________________________
 
     app.get("/UserPaymentDetailUnikDataFind/:id", async (req, res) => {
       let id = req.params.id
-      console.log(id)
+      // console.log(id)
       let query = { _id: new ObjectId(id) }
       let result = await UserPaymentRequestCollection.findOne(query)
       res.send(result)
@@ -532,6 +533,34 @@ async function run() {
       res.send(result)
     })
 
+    // Admin User Order Invoice Update 
+    // =============================================================
+
+    app.put("/AdminUserOrderInvoiceUpdate/:id", async (req, res) => {
+
+      let upId = req.params.id
+      let upData = req.body
+      let filter = { _id: new ObjectId(upId) }
+      let options = { upsert: true }
+
+      let AdminUpUserInvoiceOrder = {
+        $set: {
+          name: upData.nameUp,
+          weight: upData.WeightUp,
+          policeStation: upData.policeStationUp,
+          number: upData.numberUp,
+          note: upData.noteUp,
+          address: upData.addressUp,
+          District: upData.districtUp,
+          CodAmount: upData.CodAmountUp,
+          DeliveryCharge: upData.DeliveryChargeUp,
+          Invoice: upData.InvoiceUP
+        },
+      };
+      let result = await StandardDelivery.updateOne(filter, AdminUpUserInvoiceOrder, options)
+      res.send(result)
+
+    })
 
 
     // Admin was send tracking message many id   
