@@ -13,9 +13,9 @@ app.use(express.json())
 
 
 
-
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const uri = `mongodb+srv://${process.env.ENV_NAME}:${process.env.ENV_PASSWORD}@shipon.yrgfrvx.mongodb.net/?retryWrites=true&w=majority`;
+
+const uri = `mongodb+srv://${process.env.ENV_NAME}:${process.env.ENV_PASSWORD}@cluster0.qzzmb4j.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -44,13 +44,33 @@ async function run() {
     const UserTrackingMessageCollection = client.db("ShipProjects").collection("UserTrackingMessage")
 
 
+    const AddBalanceRequestUserCollection = client.db("ShipProjects").collection("AddBalanceRequestUser")
+
+    // ======================================================================================================
+    // Connect all folder code of route Start
+    // =========================================================
+
+    const AddBalanceReq = require("./Route/AddBalance/AddBalance")(AddBalanceRequestUserCollection);
+    app.use("/UserAddBalanceReq", AddBalanceReq);
+
+
+
+
+
+
+
+
+
+    // =========================================================
+    // Connect all folder code of route End
+    // ======================================================================================================
+
     // get all user Admin Dashboarde __________________________
 
     app.get("/users", async (req, res) => {
       let result = await userCollection.find().toArray()
       res.send(result)
     })
-
     // Admin Update User Status __________________________
     app.patch("/AdminApprovedNewUser/:id", async (req, res) => {
 
@@ -1150,17 +1170,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
-
-
-
-
-
-
-
-
-
 
 
 
