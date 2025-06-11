@@ -43,17 +43,29 @@ async function run() {
     const UserPickupRequestCollection = client.db("ShipProjects").collection("UserPickupRequest")
     const UserTrackingMessageCollection = client.db("ShipProjects").collection("UserTrackingMessage")
 
-
     const AddBalanceRequestUserCollection = client.db("ShipProjects").collection("AddBalanceRequestUser")
+
+    const CreateHubAdminCollection = client.db("ShipProjects").collection("AllHubCreate")
+    const HubPoliceStationAddAdminCollection = client.db("ShipProjects").collection("AllHubPoliceStationAdd")
 
     // ======================================================================================================
     // Connect all folder code of route Start
     // =========================================================
 
+    // User send add balance request 
+    // ==========================================
     const AddBalanceReq = require("./Route/AddBalance/AddBalance")(AddBalanceRequestUserCollection);
     app.use("/UserAddBalanceReq", AddBalanceReq);
 
-
+    // Admin Create Hub || with Hub Update by Police Station
+    // ======================================================
+    const CreateHub = require("./Route/CreateHubAdmin/CreateHubAdmin")({CreateHubAdminCollection,HubPoliceStationAddAdminCollection});
+    app.use("/HubManageAdminCreateOrUpdatePs", CreateHub);
+    
+    // Pickup Request with handle (Admin) / (Users)
+    // ======================================================
+    const PickupRequest = require("./Route/PickupRequestParcel/PickupRequestParcel")(UserPickupRequestCollection);
+    app.use("/PickupRequestWithManegeAdminUsers", PickupRequest);
 
 
 
@@ -353,45 +365,6 @@ async function run() {
       let result = await UserPaymentRequestCollection.insertOne(Standard)
       res.send(result)
     })
-
-
-    // User Pickup Request Send. Post Pickup Request Data
-    // ===================================================================
-    app.post("/UserPickupRequestSend", async (req, res) => {
-      let Standard = req.body
-      let result = await UserPickupRequestCollection.insertOne(Standard)
-      res.send(result)
-    })
-
-    // user All Pickup Request Data find  _________________________________________
-
-    app.get("/UseAllPickupRequestDataGetAll", async (req, res) => {
-      let query = {}
-      if (req.query?.email) {
-        query = { PickReqUserEmail: req.query.email }
-      }
-      let result = await UserPickupRequestCollection.find(query).toArray()
-      res.send(result)
-
-    })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1055,68 +1028,89 @@ async function run() {
       res.send(result)
     })
 
-    // ----------------------=========================================
+    // Delete Police Station of Hub
+    // ==================================
+    app.delete('/DeletedPoliceStationWithOfCoverage/:id', async (req, res) => {
+        const id = req.params.id;
+        console.log(id)
+        const query = { _id: new ObjectId(id) }
+        const result = await CoverageAllPoliceStation.deleteOne(query);
+        res.send(result);
+    });
 
 
-    // Admin Coverage Police Station Hub Add And Update
+    // Admin Coverage Police Station Hub Add And Update  { will-delete}
     // ===================================================================
 
-    app.put("/AdminAddHubAndUpdateHub/:policeStation", async (req, res) => {
+    // app.put("/AdminAddHubAndUpdateHub/:policeStation", async (req, res) => {
 
-      let PoliceStation = req.params.policeStation
-      let upData = req.body
-      let filter = { AddPoliceStation: PoliceStation }
-      let options = { upsert: true }
-      let AddHUbAndUpdate = {
-        $set: {
-          MyHub: upData.MyHub
-        },
-      };
-      let result = await CoverageAllPoliceStation.updateOne(filter, AddHUbAndUpdate, options)
-      res.send(result)
+    //   let PoliceStation = req.params.policeStation
+    //   let upData = req.body
+    //   let filter = { AddPoliceStation: PoliceStation }
+    //   let options = { upsert: true }
+    //   let AddHUbAndUpdate = {
+    //     $set: {
+    //       MyHub: upData.MyHub
+    //     },
+    //   };
+    //   let result = await CoverageAllPoliceStation.updateOne(filter, AddHUbAndUpdate, options)
+    //   res.send(result)
 
-    })
-
-
-    // Admin All My Pickup Request Data Find
-    // _______________________________________________________________________________
-    app.get("/AdminAllPickupData", async (req, res) => {
-      let result = await UserPickupRequestCollection.find().toArray()
-      res.send(result)
-    })
-
-    // Admin My Pickup Request Data Approved
-    // _______________________________________________________________________________
-    app.put("/AdminApprovedUserPickupRequestData/:id", async (req, res) => {
-
-      let upId = req.params.id
-      let upData = req.body
-      let filter = { _id: new ObjectId(upId) }
-      let options = { upsert: true }
-      let ApprovedParcel = {
-        $set: {
-          status: "Approved",
-          parcelNum: upData.parcelNum
-        },
-      };
-      let result = await UserPickupRequestCollection.updateOne(filter, ApprovedParcel, options)
-      res.send(result)
-
-    })
+    // })
 
 
-    // Admin user PickUp Request All Data Find 
-    // _______________________________________________________________________________
+    // // Admin All My Pickup Request Data Find
+    // // _______________________________________________________________________________xx{ will-delete}
+    // app.get("/AdminAllPickupData", async (req, res) => {
+    //   let result = await UserPickupRequestCollection.find().toArray()
+    //   res.send(result)
+    // })
 
-    app.get("/AdminPickupRequestAllDataFindUser", async (req, res) => {
-      let query = {}
-      if (req.query?.email) {
-        query = { PickReqUserEmail: req.query.email }
-      }
-      let result = await UserPickupRequestCollection.find(query).toArray()
-      res.send(result)
+    // // Admin My Pickup Request Data Approved
+    // // _______________________________________________________________________________xx{ will-delete}
+    // app.put("/AdminApprovedUserPickupRequestData/:id", async (req, res) => {
+    //   let upId = req.params.id
+    //   let upData = req.body
+    //   let filter = { _id: new ObjectId(upId) }
+    //   let options = { upsert: true }
+    //   let ApprovedParcel = {
+    //     $set: {
+    //       status: "Approved",
+    //       parcelNum: upData.parcelNum
+    //     },
+    //   };
+    //   let result = await UserPickupRequestCollection.updateOne(filter, ApprovedParcel, options)
+    //   res.send(result)
 
-    })
+    // })
+    // // Admin user PickUp Request All Data Find 
+    // // _______________________________________________________________________________{ will-delete}
+    // app.get("/AdminPickupRequestAllDataFindUser", async (req, res) => {
+    //   let query = {}
+    //   if (req.query?.email) {
+    //     query = { PickReqUserEmail: req.query.email }
+    //   }
+    //   let result = await UserPickupRequestCollection.find(query).toArray()
+    //   res.send(result)
+
+    // })
+    // // User Pickup Request Send. Post Pickup Request Data
+    // // ===================================================================xx{ will-delete}
+    // app.post("/UserPickupRequestSend", async (req, res) => {
+    //   let Standard = req.body
+    //   let result = await UserPickupRequestCollection.insertOne(Standard)
+    //   res.send(result)
+    // })
+    // // user All Pickup Request Data find  _________________________________________{ will-delete}
+    // app.get("/UseAllPickupRequestDataGetAll", async (req, res) => {
+    //   let query = {}
+    //   if (req.query?.email) {
+    //     query = { PickReqUserEmail: req.query.email }
+    //   }
+    //   let result = await UserPickupRequestCollection.find(query).toArray()
+    //   res.send(result)
+    // })
+
 
 
     // =========================================================================================
@@ -1131,19 +1125,6 @@ async function run() {
       let result = await StandardDelivery.findOne(query)
       res.send(result)
     })
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
