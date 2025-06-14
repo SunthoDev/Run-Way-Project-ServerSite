@@ -47,6 +47,8 @@ async function run() {
 
     const CreateHubAdminCollection = client.db("ShipProjects").collection("AllHubCreate")
     const HubPoliceStationAddAdminCollection = client.db("ShipProjects").collection("AllHubPoliceStationAdd")
+    
+    const DispatchParcelCollection = client.db("ShipProjects").collection("DispatchAllData")
 
     // ======================================================================================================
     // Connect all folder code of route Start
@@ -66,6 +68,11 @@ async function run() {
     // ======================================================
     const PickupRequest = require("./Route/PickupRequestParcel/PickupRequestParcel")(UserPickupRequestCollection);
     app.use("/PickupRequestWithManegeAdminUsers", PickupRequest);
+
+    // Dispatch Data Work ?? With Tracking Message Sent
+    // ====================================================
+    const DispatchRequest = require("./Route/Dispatch/Dispatch")({DispatchParcelCollection,UserTrackingMessageCollection})
+    app.use("/DispatchAllRequestWithTrackingMessage",DispatchRequest);
 
 
 
