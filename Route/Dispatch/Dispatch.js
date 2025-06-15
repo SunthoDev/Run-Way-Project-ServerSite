@@ -17,26 +17,30 @@ module.exports = ({DispatchParcelCollection,UserTrackingMessageCollection}) => {
         let result = await DispatchParcelCollection.insertOne(Standard)
         res.send(result)
     })
-    
-    
-    
-
-
-
-
-
-
-    
-    // Admin Dispatch Request  Post
+    // Admin Dispatch Data Delete
     // ==============================================
+    router.delete("/AdminDeleteDispatchData/:id", async (req, res) => {
+        let id = req.params.id
+        let query = { _id : new ObjectId (id)}
+        let result = await DispatchParcelCollection.deleteOne(query)
+        res.send(result)
+    })
+    
+
+
+
+
+
+
+    
+    // Admin Tracking Message Post of Dispatch
+    // =====================================================
     router.post("/AdminTrackingRequestSentOfDispatch", async (req, res) => {
         let TrackingMessage = req.body
         let result = await UserTrackingMessageCollection.insertMany(TrackingMessage)
         res.send(result)
     })
     
-
-
 
 
 

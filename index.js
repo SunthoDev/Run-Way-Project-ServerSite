@@ -57,7 +57,7 @@ async function run() {
     // User send add balance request 
     // ==========================================
     const AddBalanceReq = require("./Route/AddBalance/AddBalance")(AddBalanceRequestUserCollection);
-    app.use("/UserAddBalanceReq", AddBalanceReq);
+    app.use("/BalanceReqUserProcessAdmin", AddBalanceReq);
 
     // Admin Create Hub || with Hub Update by Police Station
     // ======================================================
@@ -471,21 +471,21 @@ async function run() {
     // _______________________________________________________________________________
 
     app.get("/adminSearchUserId", async (req, res) => {
-
       let query = {}
-
       if (req.query?.userId) {
         query = { userId: req.query.userId }
       }
-
       // let existingUser = await userCollection.findOne(query)
       // if (existingUser.userId !== req.query?.userId) {
       //   return res.send({ message: "Your UnValid Id Numbers " })
       // }
-
       let result = await userCollection.findOne(query)
       res.send(result)
     })
+
+
+
+
 
     // user Number search admin Dashboard
     // _______________________________________________________________________________

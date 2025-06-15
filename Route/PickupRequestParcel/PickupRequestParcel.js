@@ -59,7 +59,7 @@ module.exports = (UserPickupRequestCollection) => {
         let result = await UserPickupRequestCollection.find(query).toArray()
         res.send(result)
     })
-    // |Admin Delete Pickup Request Data
+    // Admin Delete Pickup Request Data
     // ==============================================
     router.delete('/AdminDeletePickupRequestData/:id', async (req, res) => {
         const id = req.params.id;
