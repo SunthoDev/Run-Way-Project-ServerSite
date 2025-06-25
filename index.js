@@ -49,6 +49,7 @@ async function run() {
     const HubPoliceStationAddAdminCollection = client.db("ShipProjects").collection("AllHubPoliceStationAdd")
     
     const DispatchParcelCollection = client.db("ShipProjects").collection("DispatchAllData")
+    const ReturnParcelCollection = client.db("ShipProjects").collection("ReturnParcelAll")
 
     // ======================================================================================================
     // Connect all folder code of route Start
@@ -73,7 +74,11 @@ async function run() {
     // ====================================================
     const DispatchRequest = require("./Route/Dispatch/Dispatch")({DispatchParcelCollection,UserTrackingMessageCollection})
     app.use("/DispatchAllRequestWithTrackingMessage",DispatchRequest);
-
+    
+    // Return Parcel Work ?? With Tracking Message Sent
+    // ====================================================
+    const ReturnParcel = require("./Route/ReturnParcel/ReturnParcel")({ReturnParcelCollection,UserTrackingMessageCollection})
+    app.use("/ReturnParcelRequestWithTrackingMessage",ReturnParcel);
 
 
 
@@ -641,9 +646,7 @@ async function run() {
     // _______________________________________________________________________________TODO Data load plm
 
     app.get("/AdminDataEntryStandardDeliveryData", async (req, res) => {
-      console.log(req.query?.email)
-
-
+      // console.log(req.query?.email)
       let query = {}
       if (req.query?.email) {
         query = { StandardEmailUser: req.query.email }
@@ -741,7 +744,6 @@ async function run() {
     app.get("/AdminSearchConsignmentInvoice/:id", async (req, res) => {
       let id = req.params.id
       // console.log(id)
-
       let query = { _id: new ObjectId(id) }
       let result = await StandardDelivery.findOne(query)
       res.send(result)
