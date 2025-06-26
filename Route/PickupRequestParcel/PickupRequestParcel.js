@@ -4,7 +4,6 @@ const { ObjectId } = require('mongodb');
 module.exports = (UserPickupRequestCollection) => {
     let router = express.Router()
 
-
     // All Pickup Request Data Get
     // ==============================================
     router.get("/AllPickupRequestData", async (req, res) => {

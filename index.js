@@ -51,6 +51,8 @@ async function run() {
     const DispatchParcelCollection = client.db("ShipProjects").collection("DispatchAllData")
     const ReturnParcelCollection = client.db("ShipProjects").collection("ReturnParcelAll")
 
+    const NoticeMessageSendAdminCollection = client.db("ShipProjects").collection("NoticeMessage")
+
     // ======================================================================================================
     // Connect all folder code of route Start
     // =========================================================
@@ -79,7 +81,11 @@ async function run() {
     // ====================================================
     const ReturnParcel = require("./Route/ReturnParcel/ReturnParcel")({ReturnParcelCollection,UserTrackingMessageCollection})
     app.use("/ReturnParcelRequestWithTrackingMessage",ReturnParcel);
-
+    
+    // Admin Notice Message Send User All
+    // ====================================================
+    const NoticeMessage = require("./Route/NoticeMessageSend/NoticeMessageSend")(NoticeMessageSendAdminCollection)
+    app.use("/NoticeMessageSendAdminToAllUser",NoticeMessage)
 
 
 
