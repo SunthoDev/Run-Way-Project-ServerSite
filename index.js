@@ -87,6 +87,12 @@ async function run() {
     const NoticeMessage = require("./Route/NoticeMessageSend/NoticeMessageSend")(NoticeMessageSendAdminCollection)
     app.use("/NoticeMessageSendAdminToAllUser",NoticeMessage)
 
+    // Admin All Report All Data find
+    // ===============================================
+    const AllReport = require("./Route/AllReportAdmin/AllReportAdmin")({StandardDelivery,UserPickupRequestCollection,ReturnParcelCollection,DispatchParcelCollection,AddBalanceRequestUserCollection,UserPaymentRequestCollection})
+    app.use("/AdminAllReportDataFindHere",AllReport)
+
+
 
 
 
