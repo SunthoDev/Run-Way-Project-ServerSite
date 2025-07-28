@@ -47,7 +47,7 @@ async function run() {
 
     const CreateHubAdminCollection = client.db("ShipProjects").collection("AllHubCreate")
     const HubPoliceStationAddAdminCollection = client.db("ShipProjects").collection("AllHubPoliceStationAdd")
-    
+
     const DispatchParcelCollection = client.db("ShipProjects").collection("DispatchAllData")
     const ReturnParcelCollection = client.db("ShipProjects").collection("ReturnParcelAll")
 
@@ -64,9 +64,9 @@ async function run() {
 
     // Admin Create Hub || with Hub Update by Police Station
     // ======================================================
-    const CreateHub = require("./Route/CreateHubAdmin/CreateHubAdmin")({CreateHubAdminCollection,HubPoliceStationAddAdminCollection});
+    const CreateHub = require("./Route/CreateHubAdmin/CreateHubAdmin")({ CreateHubAdminCollection, HubPoliceStationAddAdminCollection });
     app.use("/HubManageAdminCreateOrUpdatePs", CreateHub);
-    
+
     // Pickup Request with handle (Admin) / (Users)
     // ======================================================
     const PickupRequest = require("./Route/PickupRequestParcel/PickupRequestParcel")(UserPickupRequestCollection);
@@ -74,23 +74,23 @@ async function run() {
 
     // Dispatch Data Work ?? With Tracking Message Sent
     // ====================================================
-    const DispatchRequest = require("./Route/Dispatch/Dispatch")({DispatchParcelCollection,UserTrackingMessageCollection})
-    app.use("/DispatchAllRequestWithTrackingMessage",DispatchRequest);
-    
+    const DispatchRequest = require("./Route/Dispatch/Dispatch")({ DispatchParcelCollection, UserTrackingMessageCollection })
+    app.use("/DispatchAllRequestWithTrackingMessage", DispatchRequest);
+
     // Return Parcel Work ?? With Tracking Message Sent
     // ====================================================
-    const ReturnParcel = require("./Route/ReturnParcel/ReturnParcel")({ReturnParcelCollection,UserTrackingMessageCollection})
-    app.use("/ReturnParcelRequestWithTrackingMessage",ReturnParcel);
-    
+    const ReturnParcel = require("./Route/ReturnParcel/ReturnParcel")({ ReturnParcelCollection, UserTrackingMessageCollection })
+    app.use("/ReturnParcelRequestWithTrackingMessage", ReturnParcel);
+
     // Admin Notice Message Send User All
     // ====================================================
     const NoticeMessage = require("./Route/NoticeMessageSend/NoticeMessageSend")(NoticeMessageSendAdminCollection)
-    app.use("/NoticeMessageSendAdminToAllUser",NoticeMessage)
+    app.use("/NoticeMessageSendAdminToAllUser", NoticeMessage)
 
     // Admin All Report All Data find
     // ===============================================
-    const AllReport = require("./Route/AllReportAdmin/AllReportAdmin")({StandardDelivery,UserPickupRequestCollection,ReturnParcelCollection,DispatchParcelCollection,AddBalanceRequestUserCollection,UserPaymentRequestCollection})
-    app.use("/AdminAllReportDataFindHere",AllReport)
+    const AllReport = require("./Route/AllReportAdmin/AllReportAdmin")({ StandardDelivery, UserPickupRequestCollection, ReturnParcelCollection, DispatchParcelCollection, AddBalanceRequestUserCollection, UserPaymentRequestCollection })
+    app.use("/AdminAllReportDataFindHere", AllReport)
 
 
 
@@ -101,15 +101,20 @@ async function run() {
     // Connect all folder code of route End
     // ======================================================================================================
 
-    // get all user Admin Dashboarde __________________________
+    // =====================================================
+    // Admin Panel User Work All
+    // =====================================================
 
+    // Get All User Data to database
+    // ============================================
     app.get("/users", async (req, res) => {
       let result = await userCollection.find().toArray()
       res.send(result)
     })
-    // Admin Update User Status __________________________
-    app.patch("/AdminApprovedNewUser/:id", async (req, res) => {
 
+    // Admin Update User Status (Approved)
+    // ============================================
+    app.patch("/AdminApprovedNewUser/:id", async (req, res) => {
       let upId = req.params.id
       // console.log(upId)
       let filter = { _id: new ObjectId(upId) }
@@ -122,10 +127,8 @@ async function run() {
       res.send(result)
 
     })
-
-
-
-    // Admin Update User Role Admin __________________________
+    // Admin Update User Role as a (Admin) 
+    // ============================================
     app.patch("/AdminUpdateRoleAdmin/:id", async (req, res) => {
       let upId = req.params.id
       let filter = { _id: new ObjectId(upId) }
@@ -137,7 +140,8 @@ async function run() {
       let result = await userCollection.updateOne(filter, updateAdmin)
       res.send(result)
     })
-    // Admin Update User Role User __________________________
+    // Admin Update User Role as a (User) 
+    // ============================================
     app.patch("/AdminUpdateRoleUser/:id", async (req, res) => {
       let upId = req.params.id
       let filter = { _id: new ObjectId(upId) }
@@ -149,77 +153,129 @@ async function run() {
       let result = await userCollection.updateOne(filter, updateAdmin)
       res.send(result)
     })
-    // Admin Update User Role Rider __________________________
-    app.patch("/AdminUpdateRoleRider/:id", async (req, res) => {
+    // Admin Update User Role as a (Rider) 
+    // ============================================
+    app.put("/AdminUpdateRoleRider/:id", async (req, res) => {
       let upId = req.params.id
       let filter = { _id: new ObjectId(upId) }
+      let options = { upsert: true }
       let updateAdmin = {
         $set: {
-          role: "rider"
+          role: "rider",
+          MyHubRider: "No"
         }
       }
-      let result = await userCollection.updateOne(filter, updateAdmin)
+      let result = await userCollection.updateOne(filter, updateAdmin, options)
       res.send(result)
     })
-    // Admin Update User Role Sub Admin __________________________
-    app.patch("/AdminUpdateRoleSubAdmin/:id", async (req, res) => {
+    // Admin Update User Role as a (Sub Admin) 
+    // ============================================
+    app.put("/AdminUpdateRoleSubAdmin/:id", async (req, res) => {
       let upId = req.params.id
       let filter = { _id: new ObjectId(upId) }
+      let options = { upsert: true }
       let updateAdmin = {
         $set: {
-          role: "subAdmin"
+          role: "subAdmin",
+          Create_Hub_Access: "No",
+          My_Hub_Access: "No",
+          Dispatch_Access: "No",
+          Assign_Parcel_Access: "No",
+          Delivery_Monitoring_Access: "No",
+          ReturnParcel_Monitoring_Access: "No",
+          Balance_Request_Access: "No",
+          All_Report_Access: "No",
+          Approved_Parcel_Access: "No",
+          Coverage_Access: "No",
+          View_Payment_Access: "No",
+          AmountUpdate_Parcel_Access: "No",
+          New_Merchants_Access: "No",
+          User_Access: "No",
+          CreateRider_Access: "No"
         }
       }
-      let result = await userCollection.updateOne(filter, updateAdmin)
+      let result = await userCollection.updateOne(filter, updateAdmin, options)
       res.send(result)
     })
-
-    // Admin Update User Role Sub Admin __________________________
+    // Admin Delete User Data
+    // ============================================
     app.delete("/AdminDeleteUsers/:id", async (req, res) => {
       let upId = req.params.id
       let query = { _id: new ObjectId(upId) }
       let result = await userCollection.deleteOne(query)
       res.send(result)
     })
+    // ================================================================
+    // (Admin can Access) To various route to (Sub-admin) in here
+    // =========================================================================================================
+    app.patch("/AdminSentRoutAccessToSubAdmin/:id", async (req, res) => {
+      let upId = req.params.id
+      let upData = req.body
+      let filter = { _id: new ObjectId(upId) }
+      let AccessRoute = {
+        $set: {
+          Create_Hub_Access: upData?.Create_Hub_Access,
+          My_Hub_Access: upData?.My_Hub_Access,
+          Dispatch_Access: upData?.Dispatch_Access,
+          Delivery_Monitoring_Access: upData?.Delivery_Monitoring_Access,
+          Assign_Parcel_Access: upData?.Assign_Parcel_Access,
+          ReturnParcel_Monitoring_Access: upData?.ReturnParcel_Monitoring_Access,
+          Balance_Request_Access: upData?.Balance_Request_Access,
+          All_Report_Access: upData?.All_Report_Access,
+          Approved_Parcel_Access: upData?.Approved_Parcel_Access,
+          Coverage_Access: upData?.Coverage_Access,
+          View_Payment_Access: upData?.View_Payment_Access,
+          AmountUpdate_Parcel_Access: upData?.AmountUpdate_Parcel_Access,
+          New_Merchants_Access: upData?.New_Merchants_Access,
+          User_Access: upData?.User_Access,
+          CreateRider_Access: upData?.CreateRider_Access
+        }
+      };
+      let result = await userCollection.updateOne(filter, AccessRoute)
+      res.send(result)
+    })
+    // ================================================================
+    // (Admin can Access TO (RIDER) of Hub ) in here !!
+    // =========================================================================================================
+    app.patch("/AdminUpdateRiderHubName/:id", async (req, res) => {
+      let upId = req.params.id
+      let upData = req.body
+      let filter = { _id: new ObjectId(upId) }
+      let AccessRoute = {
+        $set: {
+          MyHubRider: upData?.HubNameUp,
+        }
+      };
+      let result = await userCollection.updateOne(filter, AccessRoute)
+      res.send(result)
+    })
 
 
 
-    // SingUp and github or google new login user data saved Database __________________________
-
+    // ===================================================
+    // (SingUp) User Data Post to UserCollection
+    // =========================================================================================================
     app.post("/users", async (req, res) => {
       let user = req.body
-
       let query = { email: user.email }
       let existingUser = await userCollection.findOne(query)
       if (existingUser) {
         return res.send({ message: "Already existing user" })
       }
-
       let result = await userCollection.insertOne(user)
       res.send(result)
     })
-
-
-    // check user role show Dashboard _________________________________________
-
+    // (Role) User Role check fo find data by a email
+    // ===========================================================================================================
     app.get("/userRoleCheck/:email", async (req, res) => {
       let email = req.params.email
-      // console.log(email)
       let query = { email: email }
       let result = await userCollection.findOne(query)
-      // console.log(result)
       res.send(result)
     })
 
-    // user delete Dashboard _________________________________________
 
-    //   app.delete('/usersDelete/:id', async (req, res) => {
-    //     let deleteId = req.params.id
-    //     let query = { _id: new ObjectId(deleteId) }
-    //     let result = await userCollection.deleteOne(query)
-    //     res.send(result)
 
-    //   })
 
 
 
@@ -235,7 +291,6 @@ async function run() {
     })
 
     // Add Parcel,, standard parcel data get Database _________________________________________
-
     app.get("/StandardDeliveryData", async (req, res) => {
       let query = {}
       if (req.query?.StandardParcelId) {
@@ -1052,11 +1107,11 @@ async function run() {
     // Delete Police Station of Hub
     // ==================================
     app.delete('/DeletedPoliceStationWithOfCoverage/:id', async (req, res) => {
-        const id = req.params.id;
-        console.log(id)
-        const query = { _id: new ObjectId(id) }
-        const result = await CoverageAllPoliceStation.deleteOne(query);
-        res.send(result);
+      const id = req.params.id;
+      console.log(id)
+      const query = { _id: new ObjectId(id) }
+      const result = await CoverageAllPoliceStation.deleteOne(query);
+      res.send(result);
     });
 
 
