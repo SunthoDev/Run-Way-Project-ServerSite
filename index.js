@@ -52,6 +52,7 @@ async function run() {
     const ReturnParcelCollection = client.db("ShipProjects").collection("ReturnParcelAll")
 
     const NoticeMessageSendAdminCollection = client.db("ShipProjects").collection("NoticeMessage")
+    const AssignRiderCollection = client.db("ShipProjects").collection("ParcelAssignRider")
 
     // ======================================================================================================
     // Connect all folder code of route Start
@@ -91,6 +92,11 @@ async function run() {
     // ===============================================
     const AllReport = require("./Route/AllReportAdmin/AllReportAdmin")({ StandardDelivery, UserPickupRequestCollection, ReturnParcelCollection, DispatchParcelCollection, AddBalanceRequestUserCollection, UserPaymentRequestCollection })
     app.use("/AdminAllReportDataFindHere", AllReport)
+
+    // Admin All Report All Data find
+    // ===============================================
+    const AssignParcelToRider = require("./Route/AssignRiderAll/AssignRiderAll")({ AssignRiderCollection,UserTrackingMessageCollection, StandardDelivery })
+    app.use("/AdminAllAssignParcelHere", AssignParcelToRider)
 
 
 
@@ -363,10 +369,7 @@ async function run() {
       res.send(result)
     })
 
-
-
     // user All Amount change all Data find  _________________________________________
-
     app.get("/UseAllAmountChangeDataGet", async (req, res) => {
       let query = {}
       if (req.query?.email) {
@@ -377,10 +380,7 @@ async function run() {
 
     })
 
-
-
     // User Total balance Amount. Find All delivery data get______________________________
-
     app.get("/UserTotalBalanceFindDeliveryAllData", async (req, res) => {
       let query = {}
       if (req.query?.email) {
@@ -391,10 +391,7 @@ async function run() {
 
     })
 
-
-
     // user All Cancel standard delivery data find  _________________________________________
-
     app.get("/UseAllCancelStandardData", async (req, res) => {
       let query = {}
       if (req.query?.email) {
@@ -402,14 +399,11 @@ async function run() {
       }
       let result = await StandardDelivery.find(query).toArray()
       res.send(result)
-
     })
 
     // User Payment Request Send. Update Payment Status All Data
     // ===================================================================
-
     app.put("/UserPaymentRequestUpdateAllData/:email", async (req, res) => {
-
       let upEmail = req.params.email
       let upData = req.body
       let query = { StandardEmailUser: upEmail }
@@ -423,7 +417,6 @@ async function run() {
       let filter = { _id: { $in: x } }
       let options = { upsert: true }
 
-
       let ApprovedParcel = {
         $set: {
           Payment: "Paid",
@@ -435,7 +428,6 @@ async function run() {
 
     })
 
-
     // =============================================================
     // User Payment Request Send. Post Payment Request Data
     // ===================================================================
@@ -445,11 +437,8 @@ async function run() {
       res.send(result)
     })
 
-
-
     // user Bank Information Add.. Get User Information
     //  _______________________________________________________________
-
     app.get("/UserBankDetailsAddGetUserData/:id", async (req, res) => {
       let id = req.params.id
       // console.log(id)
@@ -457,7 +446,6 @@ async function run() {
       let result = await userCollection.findOne(query)
       res.send(result)
     })
-
 
     // user Bank Information Add And Update Bank Information..
     //  _________________________________________
@@ -488,7 +476,6 @@ async function run() {
     })
 
     // user All Payment Request Data find  _________________________________________
-
     app.get("/UseAllPaymentRequestDataGetAll", async (req, res) => {
       let query = {}
       if (req.query?.email) {
@@ -499,12 +486,9 @@ async function run() {
 
     })
 
-
-
     // =========================================================================================
     // All Parcel Standard Delivery invoice temporory
     // =========================================================================================
-
     app.get("/StandardDeliveryDataTemporory", async (req, res) => {
       let query = {}
       if (req.query?.StandardParcelId) {
@@ -517,7 +501,6 @@ async function run() {
 
     //  User Payment Request Data find
     // _______________________________________________________________________________
-
     app.get("/UserPaymentDetailUnikDataFind/:id", async (req, res) => {
       let id = req.params.id
       // console.log(id)
@@ -528,20 +511,12 @@ async function run() {
 
 
 
-
-
-
-
-
-
-
     // ==============================================================================
     // Admin Parcel Work
     // ==============================================================================
 
     // user id search admin Dashboard
     // _______________________________________________________________________________
-
     app.get("/adminSearchUserId", async (req, res) => {
       let query = {}
       if (req.query?.userId) {
@@ -554,9 +529,6 @@ async function run() {
       let result = await userCollection.findOne(query)
       res.send(result)
     })
-
-
-
 
 
     // user Number search admin Dashboard
@@ -579,28 +551,20 @@ async function run() {
       res.send(result)
     })
 
-
-
-
-
-
     // Admin search user standard Parcel id  Dashboard 
     // __________________________________________________________________________________
 
     app.get("/AdminSearchStandardParcelId", async (req, res) => {
 
       let query = {}
-
       if (req.query?.StandardParcelId) {
         query = { StandardParcelId: req.query.StandardParcelId }
       }
-
       // let existingUser = await userCollection.findOne(query)
       // console.log(existingUser)
       // if (existingUser.userId !== req.query?.userId) {
       //   return res.send({ message: "Your UnValid Id Numbers " })
       // }
-
       let result = await StandardDelivery.findOne(query)
       res.send(result)
     })
@@ -609,12 +573,10 @@ async function run() {
     // =============================================================
 
     app.put("/AdminUserOrderInvoiceUpdate/:id", async (req, res) => {
-
       let upId = req.params.id
       let upData = req.body
       let filter = { _id: new ObjectId(upId) }
       let options = { upsert: true }
-
       let AdminUpUserInvoiceOrder = {
         $set: {
           name: upData.nameUp,
@@ -633,8 +595,6 @@ async function run() {
       res.send(result)
 
     })
-
-
     // Admin was send tracking message many id   
     // =============================================================
 
@@ -683,26 +643,6 @@ async function run() {
       let result = await UserTrackingMessageCollection.find().toArray()
       res.send(result)
     })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
