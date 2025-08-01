@@ -1,7 +1,7 @@
 const express = require('express');
 const { ObjectId } = require('mongodb');
 
-module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery }) => {
+module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection }) => {
   let router = express.Router()
 
   // ====================================================================================================
@@ -65,6 +65,32 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     res.send(result)
   })
 
+  // Rider Save his Parcel History after Delivery Parcel
+  // =====================================================
+  router.post('/ParcelDeliveryHistoryOfRider', async (req, res) => {
+    const Data = req.body;
+    const result = await ParcelDeliveryHistoryOfRiderCollection.insertOne(Data);
+    res.send(result);
+  });
+
+  // Parcel COD amount increase rider balance
+  // =====================================================
+  router.put("/ParcelCODAmountIncreaseRiderBalance/:email", async (req, res) => {
+    const upEmail = req.params.email;
+    const upAmount = req.body;
+
+    let filter = { email: upEmail }
+    let options = { upsert: true }
+
+    let IncreaseParcelCodeAmount = {
+      $inc: {
+        ParcelCODAmountOfRider: upAmount?.ParcelCod || 0
+      }
+    }
+    let result = await userCollection.updateOne(filter, IncreaseParcelCodeAmount, options)
+    res.send(result)
+  })
+
   // Delete assign request parcel when, rider will be update parcel status.
   // ======================================================================
   router.delete('/DeleteAssignParcel/:id', async (req, res) => {
@@ -75,16 +101,51 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   });
 
 
+  // ====================================================================================================
+  // Rider Panel (Parcel Information Route) All work Here !!
+  // ====================================================================================================
 
 
-
-
-
-
-
-
-
-
+  // Parcel Collected COD Request All Data Find
+  // ===============================================
+  router.get("/ParcelCollectCODRequestAllDataFind", async (req, res) => {
+    const result = await ParcelCODRequestHistoryCollection.find().toArray();
+    res.send(result)
+  })
+  // Parcel Collected COD Request Send To Admin 
+  // =====================================================
+  router.post('/ParcelCollectAllCodRequestSend', async (req, res) => {
+    const Data = req.body;
+    const result = await ParcelCODRequestHistoryCollection.insertOne(Data);
+    res.send(result);
+  });
+  // Rider When Send a COD Request then his COD balance will be 0 
+  // =====================================================================
+  router.patch("/RiderParcelCODAmountWillBeZero/:email", async (req, res) => {
+    let upEmail = req.params.email;
+    let filter = { email: upEmail }
+    let UpdateCodeAmount = {
+      $set: {
+        ParcelCODAmountOfRider: 0
+      }
+    }
+    let result = await userCollection.updateOne(filter, UpdateCodeAmount)
+    res.send(result)
+  })
+  // Admin Approved Rider Parcel COD Request
+  // =====================================================================
+  router.patch("/AdminRiderParcelCodeReqAmountStatusApproved/:id", async (req, res) => {
+    let id = req.params.id;
+    console.log(id)
+    let query = { _id: new ObjectId(id) }
+    let UpdateCodeAmountReqStatus = {
+      $set: {
+        status: "Approved"
+      }
+    }
+    let result = await ParcelCODRequestHistoryCollection.updateOne(query, UpdateCodeAmountReqStatus)
+    res.send(result)
+  })
 
 
 

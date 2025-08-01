@@ -52,7 +52,12 @@ async function run() {
     const ReturnParcelCollection = client.db("ShipProjects").collection("ReturnParcelAll")
 
     const NoticeMessageSendAdminCollection = client.db("ShipProjects").collection("NoticeMessage")
+    const HubInformationCollection = client.db("ShipProjects").collection("HubInformation")
+    
     const AssignRiderCollection = client.db("ShipProjects").collection("ParcelAssignRider")
+    const ParcelDeliveryHistoryOfRiderCollection = client.db("ShipProjects").collection("ParcelDeliveryHistoryOfRider")
+    const ParcelCODRequestHistoryCollection = client.db("ShipProjects").collection("ParcelCODRequestHistory")
+
 
     // ======================================================================================================
     // Connect all folder code of route Start
@@ -95,7 +100,12 @@ async function run() {
 
     // Admin All Report All Data find
     // ===============================================
-    const AssignParcelToRider = require("./Route/AssignRiderAll/AssignRiderAll")({ AssignRiderCollection,UserTrackingMessageCollection, StandardDelivery })
+    const HubInformation = require("./Route/HubInformation/HubInformation")(HubInformationCollection)
+    app.use("/HubInformationAll", HubInformation)
+
+    // Admin All Report All Data find
+    // ===============================================
+    const AssignParcelToRider = require("./Route/AssignRiderAll/AssignRiderAll")({ AssignRiderCollection,UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection })
     app.use("/AdminAllAssignParcelHere", AssignParcelToRider)
 
 
