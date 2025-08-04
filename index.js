@@ -15,7 +15,10 @@ app.use(express.json())
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
-const uri = `mongodb+srv://${process.env.ENV_NAME}:${process.env.ENV_PASSWORD}@cluster0.qzzmb4j.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+// const uri = `mongodb+srv://${process.env.ENV_NAME}:${process.env.ENV_PASSWORD}@cluster0.qzzmb4j.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
+const uri = `mongodb://root:xSsKzM8XFvnS77kuHnov905NhzvU1fqP12lxd7atvGBL0McoYkdKS2fv8WlGrXP5@103.193.73.132:5654/?directConnection=true`;
+
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -35,28 +38,28 @@ async function run() {
     // User Collections Name
     // ============================================================
 
-    const userCollection = client.db("ShipProjects").collection("user")
-    const StandardDelivery = client.db("ShipProjects").collection("StandardDelivery")
-    const CoverageAllDistrictCollection = client.db("ShipProjects").collection("CoverageAllDistrict")
-    const CoverageAllPoliceStation = client.db("ShipProjects").collection("CoverageAllPoliceStation")
-    const UserPaymentRequestCollection = client.db("ShipProjects").collection("UserPaymentRequest")
-    const UserPickupRequestCollection = client.db("ShipProjects").collection("UserPickupRequest")
-    const UserTrackingMessageCollection = client.db("ShipProjects").collection("UserTrackingMessage")
+    const userCollection = client.db("trustCourier").collection("user")
+    const StandardDelivery = client.db("trustCourier").collection("StandardDelivery")
+    const CoverageAllDistrictCollection = client.db("trustCourier").collection("CoverageAllDistrict")
+    const CoverageAllPoliceStation = client.db("trustCourier").collection("CoverageAllPoliceStation")
+    const UserPaymentRequestCollection = client.db("trustCourier").collection("UserPaymentRequest")
+    const UserPickupRequestCollection = client.db("trustCourier").collection("UserPickupRequest")
+    const UserTrackingMessageCollection = client.db("trustCourier").collection("UserTrackingMessage")
 
-    const AddBalanceRequestUserCollection = client.db("ShipProjects").collection("AddBalanceRequestUser")
+    const AddBalanceRequestUserCollection = client.db("trustCourier").collection("AddBalanceRequestUser")
 
-    const CreateHubAdminCollection = client.db("ShipProjects").collection("AllHubCreate")
-    const HubPoliceStationAddAdminCollection = client.db("ShipProjects").collection("AllHubPoliceStationAdd")
+    const CreateHubAdminCollection = client.db("trustCourier").collection("AllHubCreate")
+    const HubPoliceStationAddAdminCollection = client.db("trustCourier").collection("AllHubPoliceStationAdd")
 
-    const DispatchParcelCollection = client.db("ShipProjects").collection("DispatchAllData")
-    const ReturnParcelCollection = client.db("ShipProjects").collection("ReturnParcelAll")
+    const DispatchParcelCollection = client.db("trustCourier").collection("DispatchAllData")
+    const ReturnParcelCollection = client.db("trustCourier").collection("ReturnParcelAll")
 
-    const NoticeMessageSendAdminCollection = client.db("ShipProjects").collection("NoticeMessage")
-    const HubInformationCollection = client.db("ShipProjects").collection("HubInformation")
+    const NoticeMessageSendAdminCollection = client.db("trustCourier").collection("NoticeMessage")
+    const HubInformationCollection = client.db("trustCourier").collection("HubInformation")
     
-    const AssignRiderCollection = client.db("ShipProjects").collection("ParcelAssignRider")
-    const ParcelDeliveryHistoryOfRiderCollection = client.db("ShipProjects").collection("ParcelDeliveryHistoryOfRider")
-    const ParcelCODRequestHistoryCollection = client.db("ShipProjects").collection("ParcelCODRequestHistory")
+    const AssignRiderCollection = client.db("trustCourier").collection("ParcelAssignRider")
+    const ParcelDeliveryHistoryOfRiderCollection = client.db("trustCourier").collection("ParcelDeliveryHistoryOfRider")
+    const ParcelCODRequestHistoryCollection = client.db("trustCourier").collection("ParcelCODRequestHistory")
 
 
     // ======================================================================================================
@@ -207,7 +210,10 @@ async function run() {
           AmountUpdate_Parcel_Access: "No",
           New_Merchants_Access: "No",
           User_Access: "No",
-          CreateRider_Access: "No"
+          CreateRider_Access: "No",
+          Hub_Information_Access:"No",
+          Rider_CODAmount_Request_Access:"No"
+
         }
       }
       let result = await userCollection.updateOne(filter, updateAdmin, options)
@@ -244,7 +250,9 @@ async function run() {
           AmountUpdate_Parcel_Access: upData?.AmountUpdate_Parcel_Access,
           New_Merchants_Access: upData?.New_Merchants_Access,
           User_Access: upData?.User_Access,
-          CreateRider_Access: upData?.CreateRider_Access
+          CreateRider_Access: upData?.CreateRider_Access,
+          Hub_Information_Access: upData?.Hub_Information_Access,
+          Rider_CODAmount_Request_Access: upData?.Rider_CODAmount_Request_Access
         }
       };
       let result = await userCollection.updateOne(filter, AccessRoute)

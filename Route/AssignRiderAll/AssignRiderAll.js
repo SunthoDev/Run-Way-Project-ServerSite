@@ -49,6 +49,13 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   // ====================================================================================================
 
 
+  // Rider Parcel Delivery History Find All
+  // ===============================================
+  router.get("/ParcelDeliveryHistoryAllDataFind", async (req, res) => {
+    const result = await ParcelDeliveryHistoryOfRiderCollection.find().toArray();
+    res.send(result)
+  })
+
   // Rider Parcel Status update after Delivery parcel
   // =====================================================
   router.patch("/RiderParcelDeliveryStatusUpdate/:id", async (req, res) => {
@@ -136,7 +143,6 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   // =====================================================================
   router.patch("/AdminRiderParcelCodeReqAmountStatusApproved/:id", async (req, res) => {
     let id = req.params.id;
-    console.log(id)
     let query = { _id: new ObjectId(id) }
     let UpdateCodeAmountReqStatus = {
       $set: {
@@ -144,6 +150,14 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
       }
     }
     let result = await ParcelCODRequestHistoryCollection.updateOne(query, UpdateCodeAmountReqStatus)
+    res.send(result)
+  })
+  // Admin Delete Rider Parcel COD Request
+  // =====================================================================
+  router.delete("/AdminRiderParcelCodeReqAmountDelete/:id", async (req, res) => {
+    let id = req.params.id;
+    let query = { _id: new ObjectId(id) }
+    let result = await ParcelCODRequestHistoryCollection.deleteOne(query)
     res.send(result)
   })
 
