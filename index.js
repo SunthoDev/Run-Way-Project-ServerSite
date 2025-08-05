@@ -1191,8 +1191,7 @@ run().catch(console.dir);
 
 
 app.get("/", (req, res) => {
-
-  res.send("Ecommerse Server is running")
+  res.send("Ecommerse Server is running (test)")
 })
 
 app.listen(port, () => {
