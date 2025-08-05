@@ -1191,7 +1191,7 @@ run().catch(console.dir);
 
 
 app.get("/", (req, res) => {
-  res.send("Ecommerse Server is running")
+  res.send("Trustereo courier website Server is running")
 })
 
 app.listen(port, () => {
