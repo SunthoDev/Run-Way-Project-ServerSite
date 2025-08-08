@@ -587,7 +587,7 @@ async function run() {
       res.send(result)
     })
 
-    // Admin Update User Entry Parcent Informations. 
+    // Admin Update User Entry Parcel Information. 
     // =============================================================
     app.patch("/AdminUserOrderInvoiceUpdate/:id", async (req, res) => {
       let upId = req.params.id
@@ -1002,11 +1002,10 @@ async function run() {
 
     // Admin User Payment Request Unik Data find
     // _______________________________________________________________________________
-
     app.get("/AdminPaymentDetailsUnikeDatFind/:id", async (req, res) => {
       let id = req.params.id
       // console.log(id)
-      let query = { _id: new ObjectId(id) }
+      let query = { ReqPaymentID: id }
       let result = await UserPaymentRequestCollection.findOne(query)
       res.send(result)
     })
