@@ -587,35 +587,40 @@ async function run() {
       res.send(result)
     })
 
-    // Admin User Order Invoice Update 
+    // Admin Update User Entry Parcent Informations. 
     // =============================================================
-
-    app.put("/AdminUserOrderInvoiceUpdate/:id", async (req, res) => {
+    app.patch("/AdminUserOrderInvoiceUpdate/:id", async (req, res) => {
       let upId = req.params.id
       let upData = req.body
       let filter = { _id: new ObjectId(upId) }
-      let options = { upsert: true }
       let AdminUpUserInvoiceOrder = {
         $set: {
-          name: upData.nameUp,
-          weight: upData.WeightUp,
-          policeStation: upData.policeStationUp,
-          number: upData.numberUp,
-          note: upData.noteUp,
-          address: upData.addressUp,
-          District: upData.districtUp,
-          CodAmount: upData.CodAmountUp,
-          DeliveryCharge: upData.DeliveryChargeUp,
-          Invoice: upData.InvoiceUP
+          deliveryType: upData.deliveryTypeUP,
+          name: upData.nameUP,
+          address: upData.addressUP,
+          District: upData.DistrictUP,
+          policeStation: upData.policeStationUP,
+          AlternativePhone: upData.AlternativePhoneUP,
+          RecipientEmail: upData.RecipientEmailUP,
+          number: upData.numberUP,
+          CodAmount: upData.CodAmountUP,
+          Invoice: upData.InvoiceUP,
+          ItemDescription: upData.ItemDescriptionUP,
+          note: upData.noteUP,
+          weight: upData.weightUP,
+          DeliveryCharge: upData.DeliveryChargeUP,
+          ParcelCategory: upData.ParcelCategoryUP,
+          MyHub: upData.MyHubUP,
         },
       };
-      let result = await StandardDelivery.updateOne(filter, AdminUpUserInvoiceOrder, options)
+      let result = await StandardDelivery.updateOne(filter, AdminUpUserInvoiceOrder)
       res.send(result)
 
     })
+
+
     // Admin was send tracking message many id   
     // =============================================================
-
     app.post("/AdminTrackingSendMessage", async (req, res) => {
       let trackingMeId = req.body
       let { mes1, mes2, mes3, mes4, mes5, mes6, mes7, mes8, mes9, mes10, mes11, mes12, mes13, mes14, mes15, mes16, mes17, mes18, TrackingMessage, TrackingDate } = trackingMeId
