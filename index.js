@@ -56,7 +56,7 @@ async function run() {
 
     const NoticeMessageSendAdminCollection = client.db("trustCourier").collection("NoticeMessage")
     const HubInformationCollection = client.db("trustCourier").collection("HubInformation")
-    
+
     const AssignRiderCollection = client.db("trustCourier").collection("ParcelAssignRider")
     const ParcelDeliveryHistoryOfRiderCollection = client.db("trustCourier").collection("ParcelDeliveryHistoryOfRider")
     const ParcelCODRequestHistoryCollection = client.db("trustCourier").collection("ParcelCODRequestHistory")
@@ -108,7 +108,7 @@ async function run() {
 
     // Admin All Report All Data find
     // ===============================================
-    const AssignParcelToRider = require("./Route/AssignRiderAll/AssignRiderAll")({ AssignRiderCollection,UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection })
+    const AssignParcelToRider = require("./Route/AssignRiderAll/AssignRiderAll")({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection })
     app.use("/AdminAllAssignParcelHere", AssignParcelToRider)
 
 
@@ -211,8 +211,8 @@ async function run() {
           New_Merchants_Access: "No",
           User_Access: "No",
           CreateRider_Access: "No",
-          Hub_Information_Access:"No",
-          Rider_CODAmount_Request_Access:"No"
+          Hub_Information_Access: "No",
+          Rider_CODAmount_Request_Access: "No"
 
         }
       }
@@ -972,17 +972,20 @@ async function run() {
 
     // Admin Paid all User Payment Request Data
     // _______________________________________________________________________________
-    app.patch("/AdminPaidUserPaymentRequestData/:id", async (req, res) => {
-
+    app.put("/AdminPaidUserPaymentRequestData/:id", async (req, res) => {
       let upId = req.params.id
-      // console.log(upId)
+      let upData = req.body
       let filter = { _id: new ObjectId(upId) }
+      let options = { upsert: true }
       let ApprovedParcel = {
         $set: {
-          Payment: "Paid"
+          Payment: "Paid",
+          PaidDate: upData?.PaidDate,
+          PaidTime: upData?.PaidTime,
+          PaidPersonName: upData?.PaidPersonName
         },
       };
-      let result = await UserPaymentRequestCollection.updateOne(filter, ApprovedParcel)
+      let result = await UserPaymentRequestCollection.updateOne(filter, ApprovedParcel, options)
       res.send(result)
 
     })
