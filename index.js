@@ -990,9 +990,8 @@ async function run() {
 
     })
 
-    // Admin user Payment Request All Data Find
+    // Admin user Payment Request All Data Find by Email
     // _______________________________________________________________________________
-
     app.get("/AdminPaymentRequestAllDataFind", async (req, res) => {
       let query = {}
       if (req.query?.email) {
@@ -1013,10 +1012,25 @@ async function run() {
       res.send(result)
     })
 
+    // Admin Update user payment request method!!
+    // ==========================================================
+    app.patch("/AdminUpdateUserSendPaymentInvoiceData/:id", async (req, res) => {
+      let upId = req.params.id
+      let upData = req.body
+      let filter = { _id: new ObjectId(upId) }
+      let UpdatePayment = {
+        $set: {
+          ReqPay: upData?.PayUp,
+        },
+      };
+      let result = await UserPaymentRequestCollection.updateOne(filter, UpdatePayment)
+      res.send(result)
+    })
+
+
 
     // Admin Payment request send, user email find all standard delivery data
     // _______________________________________________________________________________
-
     app.get("/AdminPaymentRequestSendUserEmailFindAllDeliveryData", async (req, res) => {
       let query = {}
       if (req.query?.email) {
@@ -1029,7 +1043,6 @@ async function run() {
 
     // Admin Payment request send, user Information get user Collection
     // _______________________________________________________________________________
-
     app.get("/AdminPaymentRequestSendUserInformationGet", async (req, res) => {
       let query = {}
       if (req.query?.email) {
