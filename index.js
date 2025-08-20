@@ -569,16 +569,17 @@ async function run() {
 
       res.send(result)
     })
-    // Admin Search user By user Number
+    // Admin search all parcel by user number
     // ========================================
     app.get("/adminSearchUserNumber", async (req, res) => {
       let query = {}
       if (req.query?.userNumber) {
-        query = { Phone: req.query.userNumber }
+        query = { number: req.query.userNumber }
       }
-      let result = await userCollection.findOne(query)
+      let result = await StandardDelivery.find(query).toArray()
       res.send(result)
     })
+
 
     // Admin search user standard Parcel id  Dashboard 
     // __________________________________________________________________________________
@@ -589,11 +590,6 @@ async function run() {
       if (req.query?.StandardParcelId) {
         query = { StandardParcelId: req.query.StandardParcelId }
       }
-      // let existingUser = await userCollection.findOne(query)
-      // console.log(existingUser)
-      // if (existingUser.userId !== req.query?.userId) {
-      //   return res.send({ message: "Your UnValid Id Numbers " })
-      // }
       let result = await StandardDelivery.findOne(query)
       res.send(result)
     })
