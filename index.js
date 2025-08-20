@@ -5,8 +5,8 @@ const cors = require("cors")
 const port = process.env.PORT || 5000
 
 // ===============================
-
 // middleware
+// ===============================
 app.use(cors())
 app.use(express.json())
 // ================================
@@ -547,38 +547,35 @@ async function run() {
     // Admin Parcel Work
     // ==============================================================================
 
-    // user id search admin Dashboard
-    // _______________________________________________________________________________
+    // Admin Search user By user ID
+    // ========================================
     app.get("/adminSearchUserId", async (req, res) => {
-      let query = {}
+
+      let result = null;
       if (req.query?.userId) {
-        query = { userId: req.query.userId }
+        // প্রথমে userId দিয়ে খোঁজা
+        result = await userCollection.findOne({ userId: req.query.userId });
+
+        // যদি না পায় → Phone দিয়ে খোঁজা
+        if (!result) {
+          result = await userCollection.findOne({ Phone: req.query.userId });
+        }
       }
-      // let existingUser = await userCollection.findOne(query)
-      // if (existingUser.userId !== req.query?.userId) {
-      //   return res.send({ message: "Your UnValid Id Numbers " })
+      // let query = {}
+      // if (req.query?.userId) {
+      //   query = { userId: req.query.userId }
       // }
-      let result = await userCollection.findOne(query)
+      // let result = await userCollection.findOne(query)
+
       res.send(result)
     })
-
-
-    // user Number search admin Dashboard
-    // _______________________________________________________________________________
-
+    // Admin Search user By user Number
+    // ========================================
     app.get("/adminSearchUserNumber", async (req, res) => {
-
       let query = {}
-
       if (req.query?.userNumber) {
         query = { Phone: req.query.userNumber }
       }
-
-      // let existingUser = await userCollection.findOne(query)
-      // if (existingUser.userId !== req.query?.userId) {
-      //   return res.send({ message: "Your UnValid Id Numbers " })
-      // }
-
       let result = await userCollection.findOne(query)
       res.send(result)
     })

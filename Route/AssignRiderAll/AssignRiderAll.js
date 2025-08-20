@@ -4,10 +4,9 @@ const { ObjectId } = require('mongodb');
 module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection }) => {
   let router = express.Router()
 
-  // ====================================================================================================
+  // ============================================================================================================
   // Here is (Single) Assign parcel all work here !!
-  // ====================================================================================================
-
+  // ============================================================================================================
   // Find All Assign Parcel which is assign to rider
   // ===============================================
   router.get("/AllAssignParcelFindToHere", async (req, res) => {
@@ -43,10 +42,9 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     res.send(result)
   })
 
-  // ====================================================================================================
+  // ============================================================================================================
   // Here is (Multiple) Assign parcel all work here !!
-  // ====================================================================================================
-
+  // ============================================================================================================
   // Admin gave Assign Parcel to Rider (Multiple)
   // ================================================
   router.post('/InsertAssignParcelToRiderMultiple', async (req, res) => {
@@ -57,15 +55,14 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   // Admin Tracking Message Post of Assign Rider (Multiple)
   // =====================================================
   router.post("/AdminTrackingRequestSentOfAssignRiderMultiple", async (req, res) => {
-    let TrackingMessage = req.body
+    let TrackingMessage = req.body;
     let result = await UserTrackingMessageCollection.insertMany(TrackingMessage)
     res.send(result)
   })
-
   // Admin Update Parcel AssignRider Status (Yes) (Multiple)
   // =========================================================
   router.patch("/ParcelAssignStatusUpdateYesMultiple", async (req, res) => {
-    let ids = req.body.ids;
+    let ids = req.body.ids.map(String);
     // console.log(upId)
     let filter = { StandardParcelId: { $in: ids } };
     let ApprovedParcel = {
@@ -78,29 +75,10 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // ====================================================================================================
+  
+  // ============================================================================================================
   // Rider Parcel Approved And Change Status All Work Here!!
-  // ====================================================================================================
-
+  // ============================================================================================================
   // Rider Parcel Delivery History Find All
   // ===============================================
   router.get("/ParcelDeliveryHistoryAllDataFind", async (req, res) => {
@@ -160,11 +138,9 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   });
 
 
-  // ====================================================================================================
+  // ============================================================================================================
   // Rider Panel (Parcel Information Route) All work Here !!
-  // ====================================================================================================
-
-
+  // ============================================================================================================
   // Parcel Collected COD Request All Data Find
   // ===============================================
   router.get("/ParcelCollectCODRequestAllDataFind", async (req, res) => {
@@ -213,6 +189,8 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     res.send(result)
   })
 
+  // ============================================================================================================
+  // ============================================================================================================
 
 
 
