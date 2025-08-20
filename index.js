@@ -895,10 +895,9 @@ async function run() {
     })
 
 
-    // Admin Approved Parcel Standard delivery data..Update Payment yes
-    // _______________________________________________________________________________
+    // Rider Delivery, Partial-Delivery, Cancel Parcel Approved To Admin
+    // ==============================================================================
     app.patch("/AdminApprovedParcelStandardDataYesPayment/:id", async (req, res) => {
-
       let upId = req.params.id
       // console.log(upId)
       let filter = { _id: new ObjectId(upId) }
@@ -909,9 +908,24 @@ async function run() {
       };
       let result = await StandardDelivery.updateOne(filter, ApprovedParcel)
       res.send(result)
-
     })
-
+    // Admin can back to pending delivery,partial-delivery,cancel 
+    // data of rider from approved route in admin panel
+    // =============================================================
+    app.patch("/AdminApprovedParcelDataBackToPendingStatus/:id", async (req, res) => {
+      let upId = req.params.id
+      // console.log(upId)
+      let filter = { _id: new ObjectId(upId) }
+      let ApprovedParcel = {
+        $set: {
+          AssignRider: "No",
+          Payment: "No",
+          status: "Pending"
+        },
+      };
+      let result = await StandardDelivery.updateOne(filter, ApprovedParcel)
+      res.send(result)
+    })
 
     // Admin Approved Pending Parcel Data, Back Pending
     // _______________________________________________________________________________
@@ -922,6 +936,8 @@ async function run() {
       let filter = { _id: new ObjectId(upId) }
       let ApprovedParcel = {
         $set: {
+          status: "Pending",
+          AssignRider: "No",
           status: "Pending"
         },
       };
