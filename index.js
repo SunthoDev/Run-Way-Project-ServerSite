@@ -172,6 +172,20 @@ async function run() {
       let result = await userCollection.updateOne(filter, updateAdmin)
       res.send(result)
     })
+    // Admin update user to Create Rider
+    // ============================================
+    app.patch("/AdminUpdateRoleUserToCreateRider/:id", async (req, res) => {
+      let upId = req.params.id
+      let filter = { _id: new ObjectId(upId) }
+      let updateAdmin = {
+        $set: {
+          role: "user",
+          MyHubRider: "NoHub"
+        }
+      }
+      let result = await userCollection.updateOne(filter, updateAdmin)
+      res.send(result)
+    })
     // Admin Update User Role as a (Rider) 
     // ============================================
     app.put("/AdminUpdateRoleRider/:id", async (req, res) => {
