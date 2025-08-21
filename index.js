@@ -583,9 +583,7 @@ async function run() {
 
     // Admin search user standard Parcel id  Dashboard 
     // __________________________________________________________________________________
-
     app.get("/AdminSearchStandardParcelId", async (req, res) => {
-
       let query = {}
       if (req.query?.StandardParcelId) {
         query = { StandardParcelId: req.query.StandardParcelId }

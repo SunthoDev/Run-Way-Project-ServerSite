@@ -113,18 +113,6 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-  
   // ============================================================================================================
                                              // RIDER PANEL
   // ============================================================================================================
@@ -183,6 +171,41 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   // Delete assign request parcel when, rider will be update parcel status.
   // ======================================================================
   router.delete('/DeleteAssignParcel/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) }
+    const result = await AssignRiderCollection.deleteOne(query);
+    res.send(result);
+  });
+
+  // ============================================================================================================
+  // Rider Panel ((Return) Parcel Information Route) All work Here !!
+  // ============================================================================================================
+  // Rider Update (Return) Parcel Status (Approved) Rider
+  // =========================================================
+  router.patch("/ReturnParcelApprovedToRiderAfterDelivery/:id", async (req, res) => {
+    let Id = req.params.id;
+    // console.log(upId)
+    let filter = { ReturnId: Id };
+    let ApprovedParcel = {
+      $set: {
+        ReturnStatus: "Approved"
+      },
+    };
+    let result = await ReturnParcelCollection.updateOne(filter, ApprovedParcel)
+    res.send(result)
+  })
+
+  // Rider Tracking Message Post of (Return) Parcel success return (Multiple)
+  // ===========================================================================
+  router.post("/RiderTrackingRequestSentOfReturnParcelSuccessReturnMultiple", async (req, res) => {
+    let TrackingMessage = req.body;
+    let result = await UserTrackingMessageCollection.insertMany(TrackingMessage)
+    res.send(result)
+  })
+
+  // Rider delete return assign parcel request  when, rider will be update return parcel status.
+  // =============================================================================================
+  router.delete('/DeleteReturnAssignParcel/:id', async (req, res) => {
     const id = req.params.id;
     const query = { _id: new ObjectId(id) }
     const result = await AssignRiderCollection.deleteOne(query);
