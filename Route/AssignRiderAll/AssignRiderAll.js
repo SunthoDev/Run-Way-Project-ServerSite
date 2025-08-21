@@ -1,9 +1,12 @@
 const express = require('express');
 const { ObjectId } = require('mongodb');
 
-module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection }) => {
+module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection,ReturnParcelCollection }) => {
   let router = express.Router()
 
+   // ============================================================================================================
+                                          // USER PANEL (Parcel-Assign)
+  // =============================================================================================================
   // ============================================================================================================
   // Here is (Single) Assign parcel all work here !!
   // ============================================================================================================
@@ -75,7 +78,56 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   })
 
 
+  // ============================================================================================================
+                                   // USER PANEL (Return-Parcel-Assign)
+  // =============================================================================================================
+
+  // Admin gave (Return) Parcel Assign to Rider 
+  // ============================================
+  router.post('/InsertAssignReturnParcelToRider', async (req, res) => {
+    const Data = req.body;
+    const result = await AssignRiderCollection.insertOne(Data);
+    res.send(result);
+  });
+  // Admin Tracking Message Post of (Return) Parcel Assign to Rider  (Multiple)
+  // ===========================================================================
+  router.post("/AdminTrackingRequestSentOfReturnParcelAssignRiderMultiple", async (req, res) => {
+    let TrackingMessage = req.body;
+    let result = await UserTrackingMessageCollection.insertMany(TrackingMessage)
+    res.send(result)
+  })
+  // Admin Update (Return) Parcel Status (HandHover) Rider
+  // =========================================================
+  router.patch("/ReturnParcelAssignStatusUpdateHandHoverRider/:id", async (req, res) => {
+    let Id = req.params.id;
+    // console.log(upId)
+    let filter = { ReturnId: Id };
+    let ApprovedParcel = {
+      $set: {
+        ReturnStatus: "HandHoverRider"
+      },
+    };
+    let result = await ReturnParcelCollection.updateOne(filter, ApprovedParcel)
+    res.send(result)
+  })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
+  // ============================================================================================================
+                                             // RIDER PANEL
+  // ============================================================================================================
   // ============================================================================================================
   // Rider Parcel Approved And Change Status All Work Here!!
   // ============================================================================================================
