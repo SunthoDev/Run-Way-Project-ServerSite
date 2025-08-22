@@ -322,7 +322,7 @@ async function run() {
           Address: upData?.AddressUP,
           Phone: upData?.PhoneUP,
           status: upData?.statusUP,
-          District: upData?.DistrictUP,
+          Districts: upData?.DistrictUP,
           PoliceStations: upData?.PoliceStationsUP,
         }
       };
