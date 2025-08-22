@@ -130,7 +130,6 @@ async function run() {
       let result = await userCollection.find().toArray()
       res.send(result)
     })
-
     // Admin Update User Status (Approved)
     // ============================================
     app.patch("/AdminApprovedNewUser/:id", async (req, res) => {
@@ -288,8 +287,6 @@ async function run() {
       res.send(result)
     })
 
-
-
     // ===================================================
     // (SingUp) User Data Post to UserCollection
     // =========================================================================================================
@@ -311,6 +308,30 @@ async function run() {
       let result = await userCollection.findOne(query)
       res.send(result)
     })
+    // Admin Update User Information
+    // ===================================================
+    app.patch("/AdminUserInformationUpdate/:id", async (req, res) => {
+      let upId = req.params.id
+      let upData = req.body
+      let filter = { _id: new ObjectId(upId) }
+      let UpdateUserInfo = {
+        $set: {
+          name: upData?.nameUP,
+          LastName: upData?.LastNameUP,
+          BusinessName: upData?.BusinessNameUP,
+          Address: upData?.AddressUP,
+          Phone: upData?.PhoneUP,
+          status: upData?.statusUP,
+          District: upData?.DistrictUP,
+          PoliceStations: upData?.PoliceStationsUP,
+        }
+      };
+      let result = await userCollection.updateOne(filter, UpdateUserInfo)
+      res.send(result)
+    })
+
+
+
 
 
 
