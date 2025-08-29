@@ -48,6 +48,21 @@ module.exports = (UserPickupRequestCollection) => {
         res.send(result)
 
     })
+    // Admin Update Pickup Request (Hub) by Pickup request Id
+    // ===============================================================
+    router.patch("/AdminUpdatePickupRequestHubData/:id", async (req, res) => {
+        let NameOfHub = req.body
+        let upId = req.params.id
+        let filter = { PickupIdUser: (upId) }
+        let ApprovedParcel = {
+            $set: {
+                MyHub: NameOfHub?.HubName
+            },
+        };
+        let result = await UserPickupRequestCollection.updateOne(filter, ApprovedParcel)
+        res.send(result)
+
+    })
     // Pickup Request All Data Find By a Email
     // ==============================================
     router.get("/PickupRequestAllDataFindByEmail", async (req, res) => {
