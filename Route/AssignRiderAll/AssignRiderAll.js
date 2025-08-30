@@ -1,11 +1,11 @@
 const express = require('express');
 const { ObjectId } = require('mongodb');
 
-module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection,ReturnParcelCollection, UserPickupRequestCollection }) => {
+module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection, ReturnParcelCollection, UserPickupRequestCollection }) => {
   let router = express.Router()
 
-   // ============================================================================================================
-                                          // USER PANEL (Parcel-Assign)
+  // ============================================================================================================
+  // --------------------------------------USER PANEL (Parcel-Assign)
   // =============================================================================================================
   // ============================================================================================================
   // Here is (Single) Assign parcel all work here !!
@@ -46,7 +46,7 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   })
 
   // ============================================================================================================
-  // Here is (Multiple) Assign parcel all work here !!
+  // ---------------------------Here is (Multiple) Assign parcel all work here !!
   // ============================================================================================================
   // Admin gave Assign Parcel to Rider (Multiple)
   // ================================================
@@ -78,7 +78,7 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   })
 
   // ============================================================================================================
-                                   // USER PANEL (Return-Parcel-Assign)
+  // --------------------------------------USER PANEL (Return-Parcel-Assign)
   // =============================================================================================================
   // Admin gave (Return) Parcel Assign to Rider 
   // ============================================
@@ -109,7 +109,7 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     res.send(result)
   })
   // ============================================================================================================
-                               // USER PANEL (PICKUP_Request-Assign)
+  // --------------------------------------USER PANEL (PICKUP_Request-Assign)
   // =============================================================================================================
   // Admin gave Pickup Request Parcel Assign to Rider 
   // =================================================
@@ -120,7 +120,7 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   });
   // Admin Update Pickup Request AssignRider Status (Yes) 
   // =========================================================
-   router.patch("/PickupRequestAssignStatusUpdateYes/:id", async (req, res) => {
+  router.patch("/PickupRequestAssignStatusUpdateYes/:id", async (req, res) => {
     let upId = req.params.id
     // console.log(upId)
     let filter = { PickupIdUser: upId }
@@ -135,7 +135,7 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
 
 
   // ============================================================================================================
-                                             // RIDER PANEL
+  // --------------------------------------------- RIDER PANEL
   // ============================================================================================================
   // ============================================================================================================
   // Rider Parcel Approved And Change Status All Work Here!!
@@ -234,21 +234,32 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   });
 
   // ============================================================================================================
-  // Rider Panel ((Pickup Request) Information Route) All work Here !!
+  // Rider Panel (Pickup Request) Information Route) All work Here !!
   // ============================================================================================================
-
-
-
-
-
-
-
-
-
-
-
-  
-
+  // Rider approved (pickup request) data with update parcel number
+  // ==================================================================
+  router.put("/RiderApprovedUserPickupRequestData/:id", async (req, res) => {
+    let PickupUserId = req.params.id
+    let upData = req.body
+    let filter = { PickupIdUser: PickupUserId }
+    let options = { upsert: true }
+    let ApprovedPickupRequest = {
+      $set: {
+        status: "Approved",
+        parcelNum: upData.parcelNum
+      },
+    };
+    let result = await UserPickupRequestCollection.updateOne(filter, ApprovedPickupRequest, options)
+    res.send(result)
+  })
+  // Rider delete pickup request assign data when, rider will be update pickup request status.
+  // =============================================================================================
+  router.delete('/DeletePickupRequestAssignParcel/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) }
+    const result = await AssignRiderCollection.deleteOne(query);
+    res.send(result);
+  });
 
 
   // ============================================================================================================
