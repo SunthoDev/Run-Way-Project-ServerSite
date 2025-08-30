@@ -138,7 +138,7 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   // --------------------------------------------- RIDER PANEL
   // ============================================================================================================
   // ============================================================================================================
-  // Rider Parcel Approved And Change Status All Work Here!!
+  // Rider (Parcel Approved) And Change Status All Work Here!!
   // ============================================================================================================
   // Rider Parcel Delivery History Find All
   // ===============================================
@@ -197,12 +197,11 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     const result = await AssignRiderCollection.deleteOne(query);
     res.send(result);
   });
-  // ============================================================================================================
-  // Rider Panel ((Return) Parcel Information Route) All work Here !!
-  // ============================================================================================================
 
-
-  // (Admin) And (Rider) Can Update Parcel Note
+  // ============================================================================================================
+  // Rider Panel (Note Send) Rider Send Parcel Note Here !!
+  // ============================================================================================================
+    // (User) And (Rider) Can Update Parcel Note
     // =============================================================
     router.patch("/UserWithRiderUpdateParcelNote/:id", async (req, res) => {
       let upId = req.params.id
@@ -216,9 +215,9 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
       let result = await StandardDelivery.updateOne(filter, UpdateParcelNote)
       res.send(result)
     })
-    // Noter Tracking Message of (Admin) And (Rider) !!
+    // Noter Tracking Message of (User) And (Rider) !!
     // =============================================================
-    router.post("/NoteTrackingMessageSendOfUserAndRider", async (req, res) => {
+    app.post("/NoteTrackingMessageSendOfUserAndRider", async (req, res) => {
       let TrackingMessage = req.body
       let result = await UserTrackingMessageCollection.insertOne(TrackingMessage)
       res.send(result)
@@ -231,8 +230,10 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
 
 
 
+
+  
   // ============================================================================================================
-  // Rider Panel ((Return) Parcel Information Route) All work Here !!
+  // Rider Panel ((Return) Parcel) Information Route) All work Here !!
   // ============================================================================================================
   // Rider Update (Return) Parcel Status (Approved) Rider
   // =========================================================
