@@ -197,6 +197,39 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     const result = await AssignRiderCollection.deleteOne(query);
     res.send(result);
   });
+  // ============================================================================================================
+  // Rider Panel ((Return) Parcel Information Route) All work Here !!
+  // ============================================================================================================
+
+
+  // (Admin) And (Rider) Can Update Parcel Note
+    // =============================================================
+    app.patch("/UserWithRiderUpdateParcelNote/:id", async (req, res) => {
+      let upId = req.params.id
+      let upData = req.body
+      let filter = { _id: new ObjectId(upId) }
+      let UpdateParcelNote = {
+        $set: {
+          note: upData.ParcelNote,
+        },
+      };
+      let result = await StandardDelivery.updateOne(filter, UpdateParcelNote)
+      res.send(result)
+    })
+    // Noter Tracking Message of (Admin) And (Rider) !!
+    // =============================================================
+    app.post("/NoteTrackingMessageSendOfUserAndRider", async (req, res) => {
+      let TrackingMessage = req.body
+      let result = await UserTrackingMessageCollection.insertOne(TrackingMessage)
+      res.send(result)
+    })
+
+
+
+
+
+
+
 
   // ============================================================================================================
   // Rider Panel ((Return) Parcel Information Route) All work Here !!
