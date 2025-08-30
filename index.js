@@ -905,30 +905,6 @@ async function run() {
       res.send(result)
     })
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // TODO
     // Admin user id find, And Consignment user Standard Parcel Find  All
     // _______________________________________________________________________________
@@ -944,23 +920,13 @@ async function run() {
 
     })
 
-
-
-
-
-
-
-
-
-
     // Admin All Parcel Find.. Approved Parcel
     // _______________________________________________________________________________
     app.get("/AdminAllStandardDeliveryDataFind", async (req, res) => {
       let result = await StandardDelivery.find().toArray()
       res.send(result)
     })
-
-
+  
     // Rider Delivery, Partial-Delivery, Cancel Parcel Approved To Admin
     // ==============================================================================
     app.patch("/AdminApprovedParcelStandardDataYesPayment/:id", async (req, res) => {
@@ -1115,8 +1081,6 @@ async function run() {
       let result = await UserPaymentRequestCollection.updateOne(filter, UpdatePayment)
       res.send(result)
     })
-
-
 
     // Admin Payment request send, user email find all standard delivery data
     // _______________________________________________________________________________

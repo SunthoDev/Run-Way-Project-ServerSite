@@ -32,16 +32,22 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
   })
   // Admin Update Parcel AssignRider Status (Yes)
   // =====================================================
-  router.patch("/ParcelAssignStatusUpdateYes/:id", async (req, res) => {
+  router.put("/ParcelAssignStatusUpdateYes/:id", async (req, res) => {
     let upId = req.params.id
+    let upData = req.body
     // console.log(upId)
     let filter = { StandardParcelId: upId }
+    let options = { upsert: true }
     let ApprovedParcel = {
       $set: {
-        AssignRider: "Yes"
+        AssignRider: "Yes",
+        RiderEmail: upData?.RiderEmail,
+        RiderPhone: upData?.RiderPhone,
+        RiderName: upData?.RiderName,
+        RiderUserId: upData?.RiderUserId,
       },
     };
-    let result = await StandardDelivery.updateOne(filter, ApprovedParcel)
+    let result = await StandardDelivery.updateOne(filter, ApprovedParcel, options)
     res.send(result)
   })
 
