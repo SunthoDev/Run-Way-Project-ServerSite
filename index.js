@@ -635,7 +635,7 @@ async function run() {
       res.send(result)
     })
 
-    // (User) And (Rider) Can Update Parcel Note
+    // (User) Can Update Parcel Note
     // =============================================================
     app.patch("/UserWithRiderUpdateParcelNote/:id", async (req, res) => {
       let upId = req.params.id
@@ -649,7 +649,7 @@ async function run() {
       let result = await StandardDelivery.updateOne(filter, UpdateParcelNote)
       res.send(result)
     })
-    // Noter Tracking Message of (User) And (Rider) !!
+    // Noter Tracking Message of (User) !!
     // =============================================================
     app.post("/NoteTrackingMessageSendOfUserAndRider", async (req, res) => {
       let TrackingMessage = req.body
