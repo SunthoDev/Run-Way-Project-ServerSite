@@ -621,7 +621,6 @@ async function run() {
           AlternativePhone: upData.AlternativePhoneUP,
           RecipientEmail: upData.RecipientEmailUP,
           number: upData.numberUP,
-          CodAmount: upData.CodAmountUP,
           Invoice: upData.InvoiceUP,
           ItemDescription: upData.ItemDescriptionUP,
           note: upData.noteUP,
@@ -634,7 +633,6 @@ async function run() {
       let result = await StandardDelivery.updateOne(filter, AdminUpUserInvoiceOrder)
       res.send(result)
     })
-
     // (User) Can Update Parcel Note
     // =============================================================
     app.patch("/UserWithRiderUpdateParcelNote/:id", async (req, res) => {
@@ -656,8 +654,6 @@ async function run() {
       let result = await UserTrackingMessageCollection.insertOne(TrackingMessage)
       res.send(result)
     })
-
-
 
     // Admin was send tracking message many id   
     // =============================================================
@@ -861,17 +857,13 @@ async function run() {
     })
 
 
-    // Admin Consignment pending  Standard Parcel invoice Amount Update
-    // _______________________________________________________________________
-
+    // Admin Standard Parcel Amount Update !!
+    // ==============================================
     app.put("/AdminConsignmentPendingInvoiceAmountChange/:id", async (req, res) => {
-
       let upId = req.params.id
       let upData = req.body
       // console.log(upId)
       // console.log(upData)
-
-
       let filter = { _id: new ObjectId(upId) }
       let options = { upsert: true }
       let ApprovedParcel = {
@@ -885,8 +877,34 @@ async function run() {
       };
       let result = await StandardDelivery.updateOne(filter, ApprovedParcel, options)
       res.send(result)
-
     })
+    // Admin Standard Parcel Amount Update Tracking Send !!
+    // =============================================================
+    app.post("/CodChangeTrackingMessageSendToAdmin", async (req, res) => {
+      let TrackingMessage = req.body
+      let result = await UserTrackingMessageCollection.insertOne(TrackingMessage)
+      res.send(result)
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -898,7 +916,6 @@ async function run() {
     // TODO
     // Admin user id find, And Consignment user Standard Parcel Find  All
     // _______________________________________________________________________________
-
     app.get("/AdminCurrentBalanceAllData", async (req, res) => {
 
       // console.log(req.query?.email)

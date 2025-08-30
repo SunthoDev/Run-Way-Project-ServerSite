@@ -223,15 +223,6 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     res.send(result)
   })
 
-
-
-
-
-
-
-
-
-
   // ============================================================================================================
   // Rider Panel ((Return) Parcel) Information Route) All work Here !!
   // ============================================================================================================
