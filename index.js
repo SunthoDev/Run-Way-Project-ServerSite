@@ -625,7 +625,6 @@ async function run() {
           ItemDescription: upData.ItemDescriptionUP,
           note: upData.noteUP,
           weight: upData.weightUP,
-          DeliveryCharge: upData.DeliveryChargeUP,
           ParcelCategory: upData.ParcelCategoryUP,
           MyHub: upData.MyHubUP,
         },
@@ -654,7 +653,6 @@ async function run() {
       let result = await UserTrackingMessageCollection.insertOne(TrackingMessage)
       res.send(result)
     })
-
     // Admin was send tracking message many id   
     // =============================================================
     app.post("/AdminTrackingSendMessage", async (req, res) => {
@@ -885,10 +883,28 @@ async function run() {
       let result = await UserTrackingMessageCollection.insertOne(TrackingMessage)
       res.send(result)
     })
-
-
-
-
+    // Admin Standard Parcel Delivery Charge Update !!
+    // ======================================================
+    app.patch("/AdminChangeDeliveryChargeOfParcel/:id", async (req, res) => {
+      let upId = req.params.id
+      let upData = req.body
+      let filter = { _id: new ObjectId(upId) }
+      let DeliveryChargeUprateOfParcel = {
+        $set: {
+          DeliveryCharge: upData.DeliveryChargeAmountUp,
+        },
+      };
+      let result = await StandardDelivery.updateOne(filter, DeliveryChargeUprateOfParcel)
+      res.send(result)
+    })
+    // Admin delivery charge of parcel send tarcking message !!
+    // =============================================================
+    app.post("/DeliveryChargeTrackingMessageSendToAdmin", async (req, res) => {
+      let TrackingMessage = req.body
+      let result = await UserTrackingMessageCollection.insertOne(TrackingMessage)
+      res.send(result)
+    })
+    
 
 
 
