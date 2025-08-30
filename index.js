@@ -651,7 +651,7 @@ async function run() {
     })
     // Noter Tracking Message of (Admin) And (Rider) !!
     // =============================================================
-    router.post("/NoteTrackingMessageSendOfAdminAndRider", async (req, res) => {
+    app.post("/NoteTrackingMessageSendOfAdminAndRider", async (req, res) => {
       let TrackingMessage = req.body
       let result = await UserTrackingMessageCollection.insertOne(TrackingMessage)
       res.send(result)
