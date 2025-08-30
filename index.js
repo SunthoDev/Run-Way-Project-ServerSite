@@ -108,7 +108,7 @@ async function run() {
 
     // Admin All Report All Data find
     // ===============================================
-    const AssignParcelToRider = require("./Route/AssignRiderAll/AssignRiderAll")({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection,ReturnParcelCollection, UserPickupRequestCollection })
+    const AssignParcelToRider = require("./Route/AssignRiderAll/AssignRiderAll")({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection, ReturnParcelCollection, UserPickupRequestCollection })
     app.use("/AdminAllAssignParcelHere", AssignParcelToRider)
 
 
@@ -633,8 +633,34 @@ async function run() {
       };
       let result = await StandardDelivery.updateOne(filter, AdminUpUserInvoiceOrder)
       res.send(result)
-
     })
+
+    // (Admin) And (Rider) Can Update Parcel Note
+    // =============================================================
+    app.patch("/AdminWithRiderUpdateParcelNote/:id", async (req, res) => {
+      let upId = req.params.id
+      let upData = req.body
+      let filter = { _id: new ObjectId(upId) }
+      let UpdateParcelNote = {
+        $set: {
+          note: upData.ParcelNote,
+        },
+      };
+      let result = await StandardDelivery.updateOne(filter, UpdateParcelNote)
+      res.send(result)
+    })
+    // Noter Tracking Message of (Admin) And (Rider) !!
+    // =============================================================
+    router.post("/NoteTrackingMessageSendOfAdminAndRider", async (req, res) => {
+      let TrackingMessage = req.body
+      let result = await UserTrackingMessageCollection.insertOne(TrackingMessage)
+      res.send(result)
+    })
+
+
+
+
+
 
 
     // Admin was send tracking message many id   
