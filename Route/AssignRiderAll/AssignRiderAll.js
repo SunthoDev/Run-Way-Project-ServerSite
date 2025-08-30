@@ -123,7 +123,7 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
    router.patch("/PickupRequestAssignStatusUpdateYes/:id", async (req, res) => {
     let upId = req.params.id
     // console.log(upId)
-    let filter = { StandardParcelId: upId }
+    let filter = { PickupIdUser: upId }
     let ApprovedParcel = {
       $set: {
         AssignRider: "Yes"
