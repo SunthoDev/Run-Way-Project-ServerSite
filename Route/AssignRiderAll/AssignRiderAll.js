@@ -204,7 +204,7 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
 
   // (Admin) And (Rider) Can Update Parcel Note
     // =============================================================
-    app.patch("/UserWithRiderUpdateParcelNote/:id", async (req, res) => {
+    router.patch("/UserWithRiderUpdateParcelNote/:id", async (req, res) => {
       let upId = req.params.id
       let upData = req.body
       let filter = { _id: new ObjectId(upId) }
@@ -218,7 +218,7 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     })
     // Noter Tracking Message of (Admin) And (Rider) !!
     // =============================================================
-    app.post("/NoteTrackingMessageSendOfUserAndRider", async (req, res) => {
+    router.post("/NoteTrackingMessageSendOfUserAndRider", async (req, res) => {
       let TrackingMessage = req.body
       let result = await UserTrackingMessageCollection.insertOne(TrackingMessage)
       res.send(result)
