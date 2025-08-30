@@ -108,7 +108,7 @@ async function run() {
 
     // Admin All Report All Data find
     // ===============================================
-    const AssignParcelToRider = require("./Route/AssignRiderAll/AssignRiderAll")({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection,ReturnParcelCollection })
+    const AssignParcelToRider = require("./Route/AssignRiderAll/AssignRiderAll")({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection,ReturnParcelCollection, UserPickupRequestCollection })
     app.use("/AdminAllAssignParcelHere", AssignParcelToRider)
 
 

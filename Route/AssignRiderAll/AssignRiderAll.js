@@ -1,7 +1,7 @@
 const express = require('express');
 const { ObjectId } = require('mongodb');
 
-module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection,ReturnParcelCollection }) => {
+module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, StandardDelivery, ParcelDeliveryHistoryOfRiderCollection, userCollection, ParcelCODRequestHistoryCollection,ReturnParcelCollection, UserPickupRequestCollection }) => {
   let router = express.Router()
 
    // ============================================================================================================
@@ -77,11 +77,9 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     res.send(result)
   })
 
-
   // ============================================================================================================
                                    // USER PANEL (Return-Parcel-Assign)
   // =============================================================================================================
-
   // Admin gave (Return) Parcel Assign to Rider 
   // ============================================
   router.post('/InsertAssignReturnParcelToRider', async (req, res) => {
@@ -110,7 +108,30 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     let result = await ReturnParcelCollection.updateOne(filter, ApprovedParcel)
     res.send(result)
   })
-
+  // ============================================================================================================
+                               // USER PANEL (PICKUP_Request-Assign)
+  // =============================================================================================================
+  // Admin gave Pickup Request Parcel Assign to Rider 
+  // =================================================
+  router.post('/InsertAssignPickupRequestToRider', async (req, res) => {
+    const Data = req.body;
+    const result = await AssignRiderCollection.insertOne(Data);
+    res.send(result);
+  });
+  // Admin Update Pickup Request AssignRider Status (Yes) 
+  // =========================================================
+   router.patch("/PickupRequestAssignStatusUpdateYes/:id", async (req, res) => {
+    let upId = req.params.id
+    // console.log(upId)
+    let filter = { StandardParcelId: upId }
+    let ApprovedParcel = {
+      $set: {
+        AssignRider: "Yes"
+      },
+    };
+    let result = await UserPickupRequestCollection.updateOne(filter, ApprovedParcel)
+    res.send(result)
+  })
 
 
   // ============================================================================================================
@@ -211,6 +232,23 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     const result = await AssignRiderCollection.deleteOne(query);
     res.send(result);
   });
+
+  // ============================================================================================================
+  // Rider Panel ((Pickup Request) Information Route) All work Here !!
+  // ============================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+  
+
 
 
   // ============================================================================================================
