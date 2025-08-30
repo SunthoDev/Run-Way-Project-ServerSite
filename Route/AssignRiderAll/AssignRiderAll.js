@@ -30,8 +30,8 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     let result = await UserTrackingMessageCollection.insertOne(TrackingMessage)
     res.send(result)
   })
-  // Admin Update Parcel AssignRider Status (Yes)
-  // =====================================================
+  // Admin Update Parcel AssignRider Status (Yes) || with ride info save to parcel
+  // =================================================================================
   router.put("/ParcelAssignStatusUpdateYes/:id", async (req, res) => {
     let upId = req.params.id
     let upData = req.body
@@ -68,18 +68,23 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     let result = await UserTrackingMessageCollection.insertMany(TrackingMessage)
     res.send(result)
   })
-  // Admin Update Parcel AssignRider Status (Yes) (Multiple)
-  // =========================================================
-  router.patch("/ParcelAssignStatusUpdateYesMultiple", async (req, res) => {
+  // Admin Update Parcel AssignRider Status (Yes) || with ride info save to parcel (Multiple)
+  // ============================================================================================
+  router.put("/ParcelAssignStatusUpdateYesMultiple", async (req, res) => {
     let ids = req.body.ids.map(String);
-    // console.log(upId)
+    let RiderInfo = req.body.RIderInfoSaveToParcel
+    let options = { upsert: true }
     let filter = { StandardParcelId: { $in: ids } };
     let ApprovedParcel = {
       $set: {
-        AssignRider: "Yes"
+        AssignRider: "Yes",
+        RiderEmail: RiderInfo?.RiderEmail,
+        RiderPhone: RiderInfo?.RiderPhone,
+        RiderName: RiderInfo?.RiderName,
+        RiderUserId: RiderInfo?.RiderUserId,
       },
     };
-    let result = await StandardDelivery.updateMany(filter, ApprovedParcel)
+    let result = await StandardDelivery.updateMany(filter, ApprovedParcel, options)
     res.send(result)
   })
 
