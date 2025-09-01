@@ -234,6 +234,48 @@ module.exports = ({ AssignRiderCollection, UserTrackingMessageCollection, Standa
     res.send(result)
   })
 
+
+  // ============================================================================================================
+  // Rider Panel ((Rejected) Parcel) Information Route) All work Here !!
+  // ============================================================================================================
+
+  // Rider Rejected Parcel AssignRider Status (No) 
+  // =================================================
+  router.patch("/RiderRejectedParcelAssignStatusUpdateYes/:id", async (req, res) => {
+    let upId = req.params.id
+    let filter = { StandardParcelId: upId }
+    let ApprovedParcel = {
+      $set: {
+        AssignRider: "No",
+      },
+    };
+    let result = await StandardDelivery.updateOne(filter, ApprovedParcel)
+    res.send(result)
+  })
+  // Tracking Message for rejected parcel to (Rider) !!
+  // =========================================================
+  router.post("/RejectedParcelRiderTrackingMessageSend", async (req, res) => {
+    let TrackingMessage = req.body
+    let result = await UserTrackingMessageCollection.insertOne(TrackingMessage)
+    res.send(result)
+  })
+  // Rider delete assign parcel for reject parcel
+  // ==================================================
+  router.delete('/DeleteAssignParcelForRejectedRider/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) }
+    const result = await AssignRiderCollection.deleteOne(query);
+    res.send(result);
+  });
+
+
+
+
+
+
+
+
+
   // ============================================================================================================
   // Rider Panel ((Return) Parcel) Information Route) All work Here !!
   // ============================================================================================================
