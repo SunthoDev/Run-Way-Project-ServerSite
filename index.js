@@ -351,12 +351,8 @@ async function run() {
       res.send(result)
     })
 
-
-
-
-
-    // user AllConsignment all Data find Finde  _________________________________________
-
+    // user AllConsignment all Data find Finde
+    // ======================================================
     app.get("/UseAllConsignmentStandardData", async (req, res) => {
       let query = {}
       if (req.query?.email) {
@@ -364,11 +360,35 @@ async function run() {
       }
       let result = await StandardDelivery.find(query).toArray()
       res.send(result)
-
     })
+    // Admin-user can delete review parcel data.
+    // ============================================
+    app.delete("/AdminAndUserDeleteReviewParcel/:id", async (req, res) => {
+      try {
+        let Id = req.params.id;
 
-    // user AllConsignment pending data invoice get  _________________________________________
+        // 1. Delete all tracking messages related to this parcel
+        let queryTrackingMessage = { userOrderIdTracking: Id };
+        let trackingDeleteResult = await UserTrackingMessageCollection.deleteMany(queryTrackingMessage);
 
+        // 2. Delete the parcel itself
+        let queryParcel = { StandardParcelId: Id };
+        let parcelDeleteResult = await StandardDelivery.deleteOne(queryParcel);
+
+        // 3. Send response
+        res.send({
+          success: true,
+          deletedTrackingMessages: trackingDeleteResult.deletedCount,
+          deletedParcel: parcelDeleteResult.deletedCount,
+        });
+      } catch (error) {
+        console.error("Delete error:", error);
+        res.status(500).send({ success: false, error: "Internal Server Error" });
+      }
+    });
+
+    // user AllConsignment pending data invoice get 
+    // ======================================================
     app.get("/UserConsignmentPendingInvoice/:id", async (req, res) => {
       let id = req.params.id
       // console.log(id)
@@ -376,10 +396,8 @@ async function run() {
       let result = await StandardDelivery.findOne(query)
       res.send(result)
     })
-
-
-    // user AllConsignment pending Invoice Update data get  _________________________________________
-
+    // user AllConsignment pending Invoice Update data get  
+    // ======================================================
     app.get("/UserConsignmentPendingInvoiceUpdate/:id", async (req, res) => {
       let id = req.params.id
       // console.log(id)
@@ -387,15 +405,11 @@ async function run() {
       let result = await StandardDelivery.findOne(query)
       res.send(result)
     })
-
-    // user AllConsignment pending Invoice Update Now Data  _________________________________________
-
+    // user AllConsignment pending Invoice Update Now Data  
+    // ======================================================
     app.patch("/UserConsignmentPendingInvoiceUpdateData/:id", async (req, res) => {
       let upId = req.params.id
       let upData = req.body
-      // console.log(upId)
-      // console.log(upData)
-
       let filter = { _id: new ObjectId(upId) }
       let ApprovedParcel = {
         $set: {
@@ -413,8 +427,8 @@ async function run() {
       let result = await StandardDelivery.updateOne(filter, ApprovedParcel)
       res.send(result)
     })
-
-    // user All Amount change all Data find  _________________________________________
+    // user All Amount change all Data find 
+    // ======================================================
     app.get("/UseAllAmountChangeDataGet", async (req, res) => {
       let query = {}
       if (req.query?.email) {
@@ -424,8 +438,8 @@ async function run() {
       res.send(result)
 
     })
-
-    // User Total balance Amount. Find All delivery data get______________________________
+    // User Total balance Amount. Find All delivery data get 
+    // ======================================================
     app.get("/UserTotalBalanceFindDeliveryAllData", async (req, res) => {
       let query = {}
       if (req.query?.email) {
@@ -435,8 +449,8 @@ async function run() {
       res.send(result)
 
     })
-
-    // user All Cancel standard delivery data find  _________________________________________
+    // user All Cancel standard delivery data find 
+    // ======================================================
     app.get("/UseAllCancelStandardData", async (req, res) => {
       let query = {}
       if (req.query?.email) {
@@ -445,7 +459,6 @@ async function run() {
       let result = await StandardDelivery.find(query).toArray()
       res.send(result)
     })
-
     // User Payment Request Send. Update Payment Status All Data
     // ===================================================================
     app.put("/UserPaymentRequestUpdateAllData/:email", async (req, res) => {
@@ -904,7 +917,7 @@ async function run() {
       let result = await UserTrackingMessageCollection.insertOne(TrackingMessage)
       res.send(result)
     })
-    
+
     // TODO
     // Admin user id find, And Consignment user Standard Parcel Find  All
     // _______________________________________________________________________________
@@ -926,7 +939,7 @@ async function run() {
       let result = await StandardDelivery.find().toArray()
       res.send(result)
     })
-  
+
     // Rider Delivery, Partial-Delivery, Cancel Parcel Approved To Admin
     // ==============================================================================
     app.patch("/AdminApprovedParcelStandardDataYesPayment/:id", async (req, res) => {
